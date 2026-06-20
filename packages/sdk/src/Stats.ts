@@ -1,15 +1,18 @@
+import type { Adapter } from "./adapters/Adapter";
+
 export interface StatsOptions {
   apiKey: string;
+  adapter: Adapter;
 }
 
 export class Stats {
-  constructor(private readonly options: StatsOptions) {}
-
-  guildJoin() {
-    console.log("Guild joined");
+  public constructor(private readonly options: StatsOptions) {
+    this.registerEvents();
   }
 
-  guildLeave() {
-    console.log("Guild left");
+  private registerEvents() {
+    this.options.adapter.onReady(() => {
+      console.log("Bot ready gg");
+    });
   }
 }
