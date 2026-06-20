@@ -1,0 +1,42 @@
+{
+  "name": "@dstats/discord.js",
+  "version": "0.0.1",
+  "description": "Official Discord.js adapter for the dstats SDK.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "keywords": [
+    "dstats",
+    "discord",
+    "discord.js",
+    "adapter",
+    "analytics"
+  ],
+  "author": "",
+  "license": "MIT",
+  "peerDependencies": {
+    "@dstats/sdk": "^0.0.1",
+    "discord.js": "^14.0.0"
+  },
+  "devDependencies": {
+    "@dstats/sdk": "workspace:*",
+    "discord.js": "^14.26.4",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.2"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts",
+    "dev": "tsx src/index.ts"
+  }
+}
