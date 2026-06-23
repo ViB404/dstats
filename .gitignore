@@ -57,3 +57,9 @@ bun.lockb
 *.pid
 *.seed
 *.pid.lock
+
+target/
+**/target/
+
+.idea/
+**/.idea/
