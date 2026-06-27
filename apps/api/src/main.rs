@@ -1,12 +1,65 @@
-use crate::database::connection::connect_db;
 
+use axum::routing::{get, post};
+use sqlx::PgPool;
+use std::net::SocketAddr;
+use axum::middleware::from_fn_with_state;
+use axum::Router;
+use tower_http::trace::TraceLayer;
+use tracing_subscriber::EnvFilter;
+use log::info;
+use crate::database::connection::connect_db;
+use crate::route::bots::register;
+use crate::route::guild::{guild_join, guild_leave};
+use crate::route::middleware::middleware;
+use crate::route::status::status;
+
+pub mod database;
+pub mod http;
+pub mod route;
+pub mod repositories;
 pub mod models;
 pub mod services;
-pub mod database;
+mod error;
+
+#[derive(Clone)]
+pub struct AppState {
+    pub pool: PgPool,
+}
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
+    tracing_subscriber::fmt()
+        .with_env_filter(
+            EnvFilter::try_from_default_env()
+                .or_else(|_| EnvFilter::try_new("axum_tracing_example=info,tower_http=debug"))?,
+        )
+        .init();
+
     let pool = connect_db().await?;
+    let app_state = AppState { pool };
+
+    let private_route = Router::new()
+        .route("/v1/guildJoin", post(guild_join))
+        .route("/v1/guildLeave", post(guild_leave))
+        .route_layer(from_fn_with_state(app_state.clone(), middleware));
+
+    let public_route = Router::new()
+        .route("/", get(status))
+        .route("/v1/register", post(register));
+
+    let app = Router::new()
+        .merge(public_route)
+        .merge(private_route)
+        .layer(TraceLayer::new_for_http())
+        .with_state(app_state);
+
+    let addr = SocketAddr::from(([0, 0, 0, 0], 3000));
+
+    info!("Starting server on {}", addr);
+
+    let listener = tokio::net::TcpListener::bind(addr).await?;
+
+    axum::serve(listener, app).await?;
 
     Ok(())
 }

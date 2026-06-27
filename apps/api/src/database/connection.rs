@@ -8,7 +8,5 @@ pub async fn connect_db() -> Result<PgPool> {
 
     let pool = PgPoolOptions::new().connect(&database_url).await?;
 
-    println!("Connected to database");
-
     Ok(pool)
 }
