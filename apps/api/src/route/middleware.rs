@@ -1,40 +1,35 @@
+use crate::AppState;
 use crate::error::AppError;
 use crate::http::response;
 use crate::services::bot_service::BotService;
-use crate::AppState;
 use axum::extract::{Request, State};
 use axum::http::StatusCode;
 use axum::middleware::Next;
 use axum::response::{IntoResponse, Response};
 
-pub async fn middleware(
-    State(state): State<AppState>,
-    mut req: Request,
-    next: Next,
-) -> Response {
-    let api_key = match req
-        .headers()
-        .get("x-api-key")
-        .and_then(|h| h.to_str().ok())
-    {
+pub async fn middleware(State(state): State<AppState>, mut req: Request, next: Next) -> Response {
+    let api_key = match req.headers().get("x-api-key").and_then(|h| h.to_str().ok()) {
         Some(key) => key,
-        None => return response::message(false, StatusCode::UNAUTHORIZED, "Need API Key").into_response(),
+        None => {
+            return response::message(false, StatusCode::UNAUTHORIZED, "Need API Key")
+                .into_response();
+        }
     };
-
-    println!("Token: {}", api_key);
 
     match BotService::authenticate_bot(&state.pool, api_key).await {
         Ok(bot) => {
-            println!("Authenticated: {}", bot.bot_name);
             req.extensions_mut().insert(bot);
 
             // Continue to handler
             next.run(req).await
         }
 
-        Err(AppError::InvalidApiKey) => {
-            response::message(false, StatusCode::UNAUTHORIZED, AppError::InvalidApiKey.to_string()).into_response()
-        }
+        Err(AppError::InvalidApiKey) => response::message(
+            false,
+            StatusCode::UNAUTHORIZED,
+            AppError::InvalidApiKey.to_string(),
+        )
+        .into_response(),
 
         Err(err) => {
             eprintln!("{err:?}");

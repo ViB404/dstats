@@ -1,5 +1,10 @@
 import type { Client } from "discord.js";
-import type { Adapter, BotInfo, GuildInfo, GuildLeft } from "@dstats/sdk";
+import type {
+  Adapter,
+  BotInfo,
+  GuildJoinPayload,
+  GuildLeavePayload,
+} from "@dstats/sdk";
 
 export class DiscordJSAdapter implements Adapter {
   public constructor(private readonly client: Client) {}
@@ -15,23 +20,22 @@ export class DiscordJSAdapter implements Adapter {
     });
   }
 
-  public onGuildJoin(callback: (guild: GuildInfo) => void): void {
+  public onGuildJoin(callback: (guild: GuildJoinPayload) => void): void {
     this.client.on("guildCreate", (guild) => {
       callback({
-        id: guild.id,
+        discord_guild_id: guild.id,
         name: guild.name,
-        iconURL: guild.iconURL() ?? null,
-        memberCount: this.client.guilds.cache.size,
-        createdAt: guild.createdAt.toISOString(),
+        icon: guild.iconURL() ?? null,
+        member_count: guild.memberCount,
+        owner_id: guild.ownerId,
       });
     });
   }
 
-  public onGuildLeave(callback: (guildLeft: GuildLeft) => void): void {
+  public onGuildLeave(callback: (guildLeft: GuildLeavePayload) => void): void {
     this.client.on("guildDelete", (guild) => {
       callback({
-        guildId: guild.id,
-        leftAt: new Date().toISOString(),
+        guild_id: guild.id,
       });
     });
   }
