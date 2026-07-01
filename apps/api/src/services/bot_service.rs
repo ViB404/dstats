@@ -31,13 +31,11 @@ impl BotService {
         Ok(())
     }
 
-    pub async fn register(
-        pool: &PgPool,
-        data: CreateBot,
-    ) -> AppResult<Bot> {
-        Ok(
-            BotRepository::create(pool, data)
-                .await?
-        )
+    pub async fn register_bot(pool: &PgPool, data: CreateBot) -> AppResult<Bot> {
+        if BotRepository::find_by_bot_id(pool, data.bot_id).await?.is_some() {
+            return Err(AppError::BotAlreadyExists);
+        }
+
+        BotRepository::create(pool, data).await
     }
 }

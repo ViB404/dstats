@@ -44,6 +44,12 @@ pub enum AppError {
 
     #[error("Invalid payload")]
     InvalidPayload,
+
+    #[error("Missing environment variable: {0}")]
+    EnvVarMissing(#[from] std::env::VarError),
+
+    #[error("Network request failed: {0}")]
+    RequestFailed(#[from] reqwest::Error),
 }
 
 pub type AppResult<T> = Result<T, AppError>;
@@ -69,6 +75,8 @@ impl IntoResponse for AppError {
             AppError::InvalidPayload => StatusCode::BAD_REQUEST,
             AppError::BotGuildLinkNotFound => StatusCode::NOT_FOUND,
             AppError::Database(_) => StatusCode::INTERNAL_SERVER_ERROR,
+            AppError::EnvVarMissing(_) => StatusCode::BAD_REQUEST,
+            AppError::RequestFailed(_) => StatusCode::INTERNAL_SERVER_ERROR,
         };
 
         (

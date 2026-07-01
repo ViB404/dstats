@@ -6,10 +6,7 @@ use axum::extract::State;
 use axum::response::IntoResponse;
 use axum::{Extension, Json};
 use serde::Deserialize;
-
-fn parse_snowflake(value: String) -> Result<i64, AppError> {
-    value.parse::<i64>().map_err(|_| AppError::InvalidPayload)
-}
+use crate::utils::parse_snowflake::parse_snowflake;
 
 #[derive(Deserialize)]
 pub struct GuildJoinRequest {
