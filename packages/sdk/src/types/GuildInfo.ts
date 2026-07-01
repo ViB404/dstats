@@ -1,12 +1,11 @@
-export interface GuildInfo {
-  id: string;
+export interface GuildJoinPayload {
+  discord_guild_id: string;
   name: string;
-  iconURL: string | null;
-  memberCount: number;
-  createdAt: string;
+  icon: string | null;
+  owner_id: string;
+  member_count: number;
 }
 
-export interface GuildLeft {
-  guildId: string;
-  leftAt: string;
+export interface GuildLeavePayload {
+  guild_id: string;
 }

@@ -25,6 +25,7 @@ tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 anyhow = "1"
 thiserror = "2"
 dotenv = "0.15.0"
-tower-http = { version = "0.7.0", features = ["trace"] }
+tower-http = { version = "0.7.0", features = ["trace", "cors"] }
 log = "0.4.33"
 axum-extra = { version = "0.12", features = ["typed-header"] }
+reqwest = { version = "0.12", features = ["json"] }

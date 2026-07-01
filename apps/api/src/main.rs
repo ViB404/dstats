@@ -1,25 +1,28 @@
-
-use axum::routing::{get, post};
-use sqlx::PgPool;
-use std::net::SocketAddr;
-use axum::middleware::from_fn_with_state;
-use axum::Router;
-use tower_http::trace::TraceLayer;
-use tracing_subscriber::EnvFilter;
-use log::info;
 use crate::database::connection::connect_db;
 use crate::route::bots::register;
 use crate::route::guild::{guild_join, guild_leave};
 use crate::route::middleware::middleware;
 use crate::route::status::status;
+use axum::Router;
+use axum::middleware::from_fn_with_state;
+use axum::routing::{get, post};
+use log::info;
+use sqlx::PgPool;
+use std::net::SocketAddr;
+use axum::http::{HeaderValue, Method};
+use axum::http::header::CONTENT_TYPE;
+use tower_http::cors::CorsLayer;
+use tower_http::trace::TraceLayer;
+use tracing_subscriber::EnvFilter;
 
 pub mod database;
-pub mod http;
-pub mod route;
-pub mod repositories;
-pub mod models;
-pub mod services;
 mod error;
+pub mod http;
+pub mod models;
+pub mod repositories;
+pub mod route;
+pub mod services;
+pub mod utils;
 
 #[derive(Clone)]
 pub struct AppState {
@@ -38,9 +41,14 @@ async fn main() -> anyhow::Result<()> {
     let pool = connect_db().await?;
     let app_state = AppState { pool };
 
+    let cors = CorsLayer::new()
+        .allow_origin("http://localhost:3000".parse::<HeaderValue>()?)
+        .allow_methods([Method::POST, Method::OPTIONS])
+        .allow_headers([CONTENT_TYPE]);
+
     let private_route = Router::new()
-        .route("/v1/guildJoin", post(guild_join))
-        .route("/v1/guildLeave", post(guild_leave))
+        .route("/v1/guild/join", post(guild_join))
+        .route("/v1/guild/leave", post(guild_leave))
         .route_layer(from_fn_with_state(app_state.clone(), middleware));
 
     let public_route = Router::new()
@@ -51,9 +59,10 @@ async fn main() -> anyhow::Result<()> {
         .merge(public_route)
         .merge(private_route)
         .layer(TraceLayer::new_for_http())
-        .with_state(app_state);
+        .with_state(app_state)
+        .layer(cors);
 
-    let addr = SocketAddr::from(([0, 0, 0, 0], 3000));
+    let addr = SocketAddr::from(([0, 0, 0, 0], 7878));
 
     info!("Starting server on {}", addr);
 

@@ -1,6 +1,7 @@
 use chrono::Utc;
 use sqlx::PgPool;
 use uuid::Uuid;
+use crate::error::{AppError, AppResult};
 use crate::models::bot_model::Bot;
 
 pub struct BotRepository;
@@ -14,27 +15,26 @@ pub struct CreateBot {
 }
 
 impl BotRepository {
-    pub async fn create(pool: &PgPool, data: CreateBot) -> Result<Bot, sqlx::Error> {
-        let bot = sqlx::query_as::<_, Bot>(
-            r#"INSERT INTO bots (
-            api_key, bot_id, bot_name, bot_avatar, owner_id)
-            VALUES ($1, $2, $3, $4, $5)
-            RETURNING *"#
-        ) .bind(data.api_key)
+    pub async fn create(pool: &PgPool, data: CreateBot) -> AppResult<Bot> {
+        sqlx::query_as::<_, Bot>(
+            r#"INSERT INTO bots (api_key, bot_id, bot_name, bot_avatar, owner_id)
+               VALUES ($1, $2, $3, $4, $5)
+               RETURNING *"#
+        )
+            .bind(data.api_key)
             .bind(data.bot_id)
             .bind(data.bot_name)
             .bind(data.bot_avatar)
             .bind(data.owner_id)
             .fetch_one(pool)
-            .await?;
-
-        Ok(bot)
+            .await
+            .map_err(AppError::from)
     }
 
     pub async fn find_by_id(
         pool: &PgPool,
         id: Uuid,
-    ) -> Result<Option<Bot>, sqlx::Error> {
+    ) -> AppResult<Option<Bot>> {
         sqlx::query_as::<_, Bot>(
             r#"
             SELECT *
@@ -45,6 +45,7 @@ impl BotRepository {
             .bind(id)
             .fetch_optional(pool)
             .await
+            .map_err(AppError::from)
     }
 
     pub async fn find_by_bot_id(
