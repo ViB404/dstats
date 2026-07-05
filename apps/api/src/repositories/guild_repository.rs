@@ -1,10 +1,22 @@
-use chrono::Utc;
-use sqlx::PgPool;
+use chrono::{DateTime, Utc};
+use serde::Serialize;
+use sqlx::{FromRow, PgPool};
 use uuid::Uuid;
 
 use crate::models::guilds_model::Guild;
 
 pub struct GuildRepository;
+
+#[derive(Debug, Serialize, FromRow)]
+pub struct GuildInfo {
+    pub discord_guild_id: i64,
+    pub name: String,
+    pub icon: Option<String>,
+    pub owner_id: Option<i64>,
+    pub last_member_count: Option<i32>,
+    pub joined_at: DateTime<Utc>,
+    pub left_at: Option<DateTime<Utc>>,
+}
 
 impl GuildRepository {
     pub async fn create(
@@ -92,5 +104,37 @@ impl GuildRepository {
             .await?;
 
         Ok(())
+    }
+
+    pub async fn guild_info(
+        pool: &PgPool,
+        bot_id: Uuid,
+        limit: i64,
+        offset: i64,
+    ) -> Result<Vec<GuildInfo>, sqlx::Error> {
+        sqlx::query_as::<_, GuildInfo>(
+            r#"
+        SELECT
+            g.discord_guild_id,
+            g.name,
+            g.icon,
+            g.owner_id,
+            g.last_member_count,
+            bg.joined_at,
+            bg.left_at
+        FROM bot_guilds bg
+        JOIN guilds g
+            ON bg.guild_id = g.id
+        WHERE bg.bot_id = $1
+        ORDER BY bg.joined_at DESC
+        LIMIT $2
+        OFFSET $3
+        "#,
+        )
+            .bind(bot_id)
+            .bind(limit)
+            .bind(offset)
+            .fetch_all(pool)
+            .await
     }
 }

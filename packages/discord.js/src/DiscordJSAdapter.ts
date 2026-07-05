@@ -10,7 +10,7 @@ export class DiscordJSAdapter implements Adapter {
   public constructor(private readonly client: Client) {}
 
   public onReady(callback: (bot: BotInfo) => void): void {
-    this.client.once("ready", () => {
+    this.client.once("clientReady", () => {
       callback({
         id: this.client.user!.id,
         username: this.client.user!.username,
