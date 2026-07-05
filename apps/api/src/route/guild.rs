@@ -1,12 +1,14 @@
 use crate::AppState;
 use crate::error::AppError;
+use crate::http::response;
 use crate::models::bot_model::Bot;
 use crate::services::guild_service::{CreateGuildJoin, GuildService};
-use axum::extract::State;
+use crate::utils::parse_snowflake::parse_snowflake;
+
+use axum::extract::{Query, State};
 use axum::response::IntoResponse;
 use axum::{Extension, Json};
-use serde::Deserialize;
-use crate::utils::parse_snowflake::parse_snowflake;
+use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize)]
 pub struct GuildJoinRequest {
@@ -52,5 +54,35 @@ pub async fn guild_leave(
     Extension(bot): Extension<Bot>,
     Json(payload): Json<GuildLeaveRequest>,
 ) -> Result<impl IntoResponse, AppError> {
-    GuildService::guild_leave(&state.pool, bot.id, parse_snowflake(payload.guild_id)?).await
+    GuildService::guild_leave(
+        &state.pool,
+        bot.id,
+        parse_snowflake(payload.guild_id)?,
+    )
+    .await
+}
+
+#[derive(Deserialize, Serialize)]
+pub struct Pagination {
+    page: i64,
+    per_page: i64,
+}
+
+pub async fn guild_info(
+    State(state): State<AppState>,
+    Extension(bot): Extension<Bot>,
+    Query(pagination): Query<Pagination>,
+) -> Result<impl IntoResponse, AppError> {
+    let page = pagination.page.max(1);
+    let per_page = pagination.per_page.clamp(1, 100);
+
+    let data = GuildService::guild_info(
+        &state.pool,
+        bot.id,
+        page,
+        per_page,
+    )
+    .await?;
+
+    Ok(response::ok(data))
 }

@@ -67,7 +67,7 @@ export default function CodePreview() {
 
         <div className="border-t border-white/10 bg-[#121212] p-6 text-sm italic text-neutral-400">
           {
-            "That's it. DStats automatically tracks guild joins, guild leaves, and bot activity — no additional code required."
+            "That's it. DStats automatically tracks guild joins, guild leaves, and bot activity - no additional code required."
           }
         </div>
       </div>

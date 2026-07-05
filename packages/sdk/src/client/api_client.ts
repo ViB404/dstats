@@ -19,10 +19,10 @@ export class ApiClient {
       });
 
       if (!response.ok) {
-        console.warn(`[DStats] ${response.status}`, await response.text());
+        // console.warn(`[DStats] ${response.status}`, await response.text());
       }
     } catch (error) {
-      console.warn("[DStats] Failed to send analytics", error);
+      // console.warn("[DStats] Failed to send analytics", error);
     }
   }
 

@@ -58,7 +58,8 @@ export default function GenerateKeyPage() {
         owner_id: ownerId.trim() || null,
       };
 
-      const response = await fetch("http://localhost:7878/v1/register", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/register`, {
+
         method: "POST",
         headers: {
           "Content-Type": "application/json",
