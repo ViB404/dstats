@@ -3,11 +3,13 @@ use crate::route::bots::{get_bot_info, register};
 use crate::route::guild::{guild_info, guild_join, guild_leave};
 use crate::route::middleware::middleware;
 use crate::route::status::status;
-use axum::Router;
+
 use axum::http::header::CONTENT_TYPE;
 use axum::http::{HeaderName, HeaderValue, Method};
 use axum::middleware::from_fn_with_state;
 use axum::routing::{get, post};
+use axum::Router;
+
 use log::info;
 use sqlx::PgPool;
 use std::net::SocketAddr;
@@ -43,8 +45,16 @@ async fn main() -> anyhow::Result<()> {
 
     let cors = CorsLayer::new()
         .allow_origin("http://localhost:3000".parse::<HeaderValue>()?)
-        .allow_methods([Method::GET, Method::POST, Method::PUT, Method::DELETE])
-        .allow_headers([CONTENT_TYPE, HeaderName::from_static("x-api-key")]);
+        .allow_methods([
+            Method::GET,
+            Method::POST,
+            Method::PUT,
+            Method::DELETE,
+        ])
+        .allow_headers([
+            CONTENT_TYPE,
+            HeaderName::from_static("x-api-key"),
+        ]);
 
     let private_route = Router::new()
         .route("/v1/guild/join", post(guild_join))
