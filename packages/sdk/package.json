@@ -1,6 +1,7 @@
 {
   "name": "@dstats/sdk",
-  "version": "0.0.1",
+  "description": "Official TypeScript SDK for DStats. Collect Discord bot analytics with a simple adapter-based API.",
+  "version": "0.0.2",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -25,10 +26,32 @@
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"
   },
-  "author": "ViB",
+  "author": {
+    "name": "ViB",
+    "url": "https://github.com/ViB404"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ViB404/dstats"
-  }
+    "url": "git+https://github.com/ViB404/dstats.git",
+    "directory": "packages/sdk"
+  },
+  "homepage": "https://dstats.havochz.xyz",
+  "bugs": {
+    "url": "https://github.com/ViB404/dstats/issues"
+  },
+  "keywords": [
+    "dstats",
+    "discord",
+    "discord-bot",
+    "discord.js",
+    "analytics",
+    "metrics",
+    "telemetry",
+    "statistics",
+    "sdk",
+    "typescript",
+    "nodejs",
+    "bot"
+  ]
 }

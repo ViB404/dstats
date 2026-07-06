@@ -1,7 +1,7 @@
 {
   "name": "@dstats/discord.js",
-  "version": "0.0.1",
-  "description": "Official Discord.js adapter for the dstats SDK.",
+  "version": "0.0.2",
+  "description": "Official Discord.js adapter for DStats. Automatically tracks guild joins and guild leaves with zero configuration.",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -20,10 +20,18 @@
     "dstats",
     "discord",
     "discord.js",
+    "discord-bot",
     "adapter",
-    "analytics"
+    "analytics",
+    "metrics",
+    "telemetry",
+    "typescript",
+    "nodejs"
   ],
-  "author": "ViB",
+  "author": {
+    "name": "ViB",
+    "url": "https://github.com/ViB404"
+  },
   "license": "MIT",
   "peerDependencies": {
     "@dstats/sdk": "^0.0.1",
@@ -41,6 +49,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ViB404/dstats"
+    "url": "git+https://github.com/ViB404/dstats.git",
+    "directory": "packages/discord.js"
+  },
+  "bugs": {
+    "url": "https://github.com/ViB404/dstats/issues"
   }
 }
