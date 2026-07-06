@@ -42,7 +42,6 @@ next-env.d.ts
 tsup.config.ts.timestamp-*
 *.d.ts.map
 
-.vscode/
 .idea/
 *.swp
 *.swo

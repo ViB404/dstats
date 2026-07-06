@@ -1,0 +1,11 @@
+{
+	"name": "api",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"start": "cargo run --release",
+		"dev": "cargo run",
+		"build": "cargo build --release",
+		"format": "cargo fmt"
+	}
+}
