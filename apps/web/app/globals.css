@@ -13,7 +13,7 @@
   --font-headline: var(--font-syne);
   --font-body: var(--font-poppins);
   --font-label: var(--font-jetbrains-mono);
-  
+
   --font-heading: var(--font-syne);
   --font-sans: var(--font-poppins);
 }
@@ -31,7 +31,7 @@
   }
 
   ::-webkit-scrollbar-track {
-    background-color: #121212; 
+    background-color: #121212;
   }
 
   ::-webkit-scrollbar-thumb {
@@ -40,9 +40,9 @@
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background-color: var(--color-secondary); 
+    background-color: var(--color-secondary);
   }
-  
+
   * {
     @apply border-border outline-ring/50;
   }
@@ -158,4 +158,18 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+}
+
+/** 
+ * https://github.com/slidevjs/slidev/pull/311/changes#diff-4337ba275893561b229cb5911cf1bcdea048e3242a65627286638eb1059a0a69R33-R43
+ */
+.shiki-code-line-numbers .shiki code {
+  counter-reset: step;
+  counter-increment: step 0;
+}
+
+.shiki-code-line-numbers .shiki code .line::before {
+  content: counter(step);
+  counter-increment: step;
+  @apply w-4 mr-6 inline-block text-right text-gray-400 dark:text-gray-600
 }

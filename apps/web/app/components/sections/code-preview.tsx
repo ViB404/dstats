@@ -1,5 +1,6 @@
 "use client";
 
+import CodeBlock from "@/app/utils/code-block";
 import { Check, Copy } from "lucide-react";
 import { useState } from "react";
 
@@ -61,7 +62,7 @@ export default function CodePreview() {
 
         <pre className="overflow-x-auto p-8">
           <code className="font-mono text-sm leading-relaxed text-neutral-200">
-            {code}
+            <CodeBlock code={code} lang="typescript" theme="github-dark" disableBg={true} addLineNumbers={true} />
           </code>
         </pre>
 

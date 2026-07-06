@@ -29,6 +29,9 @@ report.*.*.*.*.json
 .env.*
 !.env.example
 
+next-env.d.ts
+.clerk/
+
 .cache/
 .eslintcache
 .parcel-cache/
