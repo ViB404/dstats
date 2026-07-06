@@ -44,7 +44,7 @@ async fn main() -> anyhow::Result<()> {
     let app_state = AppState { pool };
 
     let cors = CorsLayer::new()
-        .allow_origin("https://api.havochz.xyz".parse::<HeaderValue>()?)
+        .allow_origin("https://dstats.havochz.xyz".parse::<HeaderValue>()?)
         .allow_methods([Method::GET, Method::POST, Method::PUT, Method::DELETE])
         .allow_headers([CONTENT_TYPE, HeaderName::from_static("x-api-key")]);
 
