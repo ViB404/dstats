@@ -12,7 +12,7 @@ export class Stats {
   private readonly apiClient: ApiClient;
   public constructor(private readonly options: StatsOptions) {
     this.apiClient = new ApiClient(
-      options.baseUrl ?? "http://localhost:7878",
+      options.baseUrl ?? "https://api.havochz.xyz",
       options.apiKey,
     );
     this.registerEvents();
