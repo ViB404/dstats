@@ -23,7 +23,7 @@
     "adapter",
     "analytics"
   ],
-  "author": "",
+  "author": "ViB",
   "license": "MIT",
   "peerDependencies": {
     "@dstats/sdk": "^0.0.1",
@@ -38,5 +38,9 @@
   "scripts": {
     "build": "tsup src/index.ts --format esm --dts",
     "dev": "tsup src/index.ts --format esm,cjs --dts --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ViB404/dstats"
   }
 }

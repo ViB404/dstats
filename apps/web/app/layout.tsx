@@ -3,6 +3,7 @@ import { Syne, Poppins, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/sonner";
+import { Analytics } from "@vercel/analytics/next";
 
 const syne = Syne({
   variable: "--font-syne",
@@ -58,6 +59,7 @@ export default function RootLayout({
         >
           {children}
           <Toaster richColors position="top-right" />
+          <Analytics />
         </body>
       </html>
     </ClerkProvider>
