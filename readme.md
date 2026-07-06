@@ -4,11 +4,14 @@
 
 **Simple, privacy-first Discord bot analytics.**
 
+[![Status](https://img.shields.io/badge/Status-Active%20Development-orange?style=for-the-badge)](https://github.com/ViB404/dstats)
 [![Discord.js](https://img.shields.io/badge/Discord.js-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.js.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![MIT License](https://img.shields.io/github/license/ViB404/dstats?style=for-the-badge)](https://github.com/ViB404/dstats/blob/main/LICENSE)
 [![GitHub Stars](https://img.shields.io/github/stars/ViB404/dstats?style=for-the-badge&logo=github)](https://github.com/ViB404/dstats/stargazers)
-[![GitHub Issues](https://img.shields.io/github/issues/ViB404/dstats?style=for-the-badge&logo=github)](https://github.com/ViB404/dstats/issues)
+
+[![Dashboard](https://img.shields.io/badge/Open-Dashboard-5865F2?style=for-the-badge)](https://dstats.havochz.xyz/dashboard)
+[![Generate API Key](https://img.shields.io/badge/Generate-API%20Key-22C55E?style=for-the-badge)](https://dstats.havochz.xyz/dashboard/api-keys)
 
 Track guild joins, guild leaves, and growth with almost zero setup.
 
@@ -34,29 +37,28 @@ Current features include:
 
 ## Features
 
-- 📈 Guild growth analytics
+- 📈 Guild growth analytics (Not working for now)
 - 🚪 Guild join & leave tracking
-- ⚡ Simple SDK
 - 🔒 Secure API key authentication
 - 📊 Clean web dashboard
-- 🦀 Rust backend
-- 💙 Open source
 
 ---
 
-## Installation (Not Sure Will can be updated)
+## Installation
+
+### npm
 
 ```bash
 npm install @dstats/sdk @dstats/discord.js
 ```
 
-or
+### pnpm
 
 ```bash
 pnpm add @dstats/sdk @dstats/discord.js
 ```
 
-or
+### Yarn
 
 ```bash
 yarn add @dstats/sdk @dstats/discord.js
@@ -72,15 +74,15 @@ import { DiscordJSAdapter } from "@dstats/discord.js";
 import { Stats } from "@dstats/sdk";
 
 const client = new Client({
-    intents: []
+  intents: []
 });
 
-new Stats({
-    apiKey: "your_api_key",
-    adapter: new DiscordJSAdapter(client)
+await new Stats({
+  apiKey: process.env.DSTATS_API_KEY!,
+  adapter: new DiscordJSAdapter(client),
 });
 
-client.login(process.env.TOKEN);
+client.login(process.env.DISCORD_TOKEN);
 ```
 
 That's it.
@@ -91,12 +93,23 @@ Guild joins and leaves are automatically tracked.
 
 ## Dashboard
 
-The dashboard provides:
+Manage your bots and view analytics from the web dashboard.
+
+| Feature | Link |
+|---------|------|
+| Dashboard | https://dstats.havochz.xyz/dashboard |
+| Generate API Key | https://dstats.havochz.xyz/dashboard/api-keys |
+
+Current dashboard features:
 
 - Bot overview
-- Total guild count (Not working for now)
+- API key management
+- Guild analytics
 - Join history
 - Leave history
+
+
+> 🚧 Additional analytics are under development.
 
 ---
 
@@ -225,6 +238,16 @@ If you find DStats useful, consider supporting the project.
 - Report bugs
 - Suggest new features
 - Contribute code
+
+---
+
+## 🚧 Development Status
+
+DStats is currently under active development.
+
+Breaking changes may occur until the first stable release.
+
+If you're using DStats today, expect APIs and SDKs to evolve as new features are added.
 
 ---
 
