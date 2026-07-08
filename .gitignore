@@ -29,6 +29,9 @@ report.*.*.*.*.json
 .env.*
 !.env.example
 
+next-env.d.ts
+.clerk/
+
 .cache/
 .eslintcache
 .parcel-cache/
@@ -39,7 +42,6 @@ report.*.*.*.*.json
 tsup.config.ts.timestamp-*
 *.d.ts.map
 
-.vscode/
 .idea/
 *.swp
 *.swo

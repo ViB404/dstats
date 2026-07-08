@@ -1,58 +1,68 @@
 {
-  "name": "@dstats/discord.js",
-  "version": "0.0.2",
-  "description": "Official Discord.js adapter for DStats. Automatically tracks guild joins and guild leaves with zero configuration.",
-  "type": "module",
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    }
-  },
-  "files": [
-    "dist"
-  ],
-  "sideEffects": false,
-  "keywords": [
-    "dstats",
-    "discord",
-    "discord.js",
-    "discord-bot",
-    "adapter",
-    "analytics",
-    "metrics",
-    "telemetry",
-    "typescript",
-    "nodejs"
-  ],
-  "author": {
-    "name": "ViB",
-    "url": "https://github.com/ViB404"
-  },
-  "license": "MIT",
-  "peerDependencies": {
-    "@dstats/sdk": "^0.0.1",
-    "discord.js": "^14.0.0"
-  },
-  "devDependencies": {
-    "@dstats/sdk": "workspace:*",
-    "discord.js": "^14.26.4",
-    "tsup": "^8.5.0",
-    "typescript": "^5.9.2"
-  },
-  "scripts": {
-    "build": "tsup src/index.ts --format esm --dts",
-    "dev": "tsup src/index.ts --format esm,cjs --dts --watch"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ViB404/dstats.git",
-    "directory": "packages/discord.js"
-  },
-  "bugs": {
-    "url": "https://github.com/ViB404/dstats/issues"
-  }
+	"name": "@dstats/discord.js",
+	"description": "Official Discord.js adapter for DStats. Automatically tracks guild joins and guild leaves with zero configuration.",
+	"version": "0.0.2",
+	"type": "module",
+	"exports": {
+		".": {
+			"import": {
+				"types": "./dist/index.d.ts",
+				"default": "./dist/index.js"
+			},
+			"require": {
+				"types": "./dist/index.d.cts",
+				"default": "./dist/index.cjs"
+			}
+		}
+	},
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"files": [
+		"dist"
+	],
+	"scripts": {
+		"build": "tsup",
+		"build:watch": "tsup --watch",
+		"typecheck": "tsc --noEmit"
+	},
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/ViB404/dstats.git",
+		"directory": "packages/discord.js"
+	},
+	"bugs": {
+		"url": "https://github.com/ViB404/dstats/issues"
+	},
+	"author": {
+		"name": "ViB",
+		"url": "https://github.com/ViB404"
+	},
+	"contributors": [],
+	"homepage": "https://dstats.havochz.xyz",
+	"funding": "https://ko-fi.com/vib404",
+	"keywords": [
+		"dstats",
+		"discord",
+		"discord.js",
+		"discord-bot",
+		"adapter",
+		"analytics",
+		"metrics",
+		"telemetry",
+		"typescript",
+		"nodejs"
+	],
+	"dependencies": {
+		"@dstats/sdk": "workspace:*"
+	},
+	"peerDependencies": {
+		"discord.js": "^14.0.0"
+	},
+	"devDependencies": {
+		"discord.js": "^14.26.4",
+		"tsup": "^8.5.0",
+		"typescript": "^5.9.2"
+	}
 }

@@ -1,4 +1,4 @@
-import type { Client } from "discord.js";
+import { Events, type Client } from "discord.js";
 import type {
   Adapter,
   BotInfo,
@@ -10,7 +10,7 @@ export class DiscordJSAdapter implements Adapter {
   public constructor(private readonly client: Client) {}
 
   public onReady(callback: (bot: BotInfo) => void): void {
-    this.client.once("clientReady", () => {
+    this.client.once(Events.ClientReady, () => {
       callback({
         id: this.client.user!.id,
         username: this.client.user!.username,
@@ -21,7 +21,7 @@ export class DiscordJSAdapter implements Adapter {
   }
 
   public onGuildJoin(callback: (guild: GuildJoinPayload) => void): void {
-    this.client.on("guildCreate", (guild) => {
+    this.client.on(Events.GuildCreate, (guild) => {
       callback({
         discord_guild_id: guild.id,
         name: guild.name,
@@ -33,7 +33,7 @@ export class DiscordJSAdapter implements Adapter {
   }
 
   public onGuildLeave(callback: (guildLeft: GuildLeavePayload) => void): void {
-    this.client.on("guildDelete", (guild) => {
+    this.client.on(Events.GuildDelete, (guild) => {
       callback({
         guild_id: guild.id,
       });
