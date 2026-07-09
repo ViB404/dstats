@@ -1,0 +1,19 @@
+{
+  "name": "playground",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx index.ts"
+  },
+  "dependencies": {
+    "@dstats/discord.js": "workspace:*",
+    "@dstats/sdk": "workspace:*",
+    "discord.js": "^14.26.4",
+    "dotenv": "^17.4.2"
+  },
+  "devDependencies": {
+    "@types/node": "^25",
+    "tsx": "^4",
+    "typescript": "^5"
+  }
+}
