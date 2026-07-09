@@ -10,8 +10,6 @@ out/
 build/
 *.tgz
 
-playground/
-
 coverage/
 *.lcov
 .nyc_output/
