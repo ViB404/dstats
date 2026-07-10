@@ -84,10 +84,10 @@ Guild joins and guild leaves are automatically tracked.
 
 ## Available Adapters
 
-| Package | Status |
-|---------|--------|
+| Package              | Status      |
+| -------------------- | ----------- |
 | `@dstats/discord.js` | ✅ Official |
-| More adapters | 🚧 Planned |
+| More adapters        | 🚧 Planned  |
 
 ---
 

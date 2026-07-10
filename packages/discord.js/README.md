@@ -103,9 +103,9 @@ https://dstats.havochz.xyz/dashboard/api-keys
 
 ## Related Packages
 
-| Package | Description |
-| ------- | ----------- |
-| `@dstats/sdk` | Core SDK |
+| Package       | Description |
+| ------------- | ----------- |
+| `@dstats/sdk` | Core SDK    |
 
 ---
 

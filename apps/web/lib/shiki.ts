@@ -9,15 +9,15 @@ import json from "shiki/langs/json.mjs";
 
 /**
  * Shiki has the issue of using a WASM engine which is by nature async, and makes SSR impossible.
- * 
+ *
  * This is a workaround to use the sync pure JS engine, which allows for sync rendering.
- * 
+ *
  * It could bring some very minimal differences in very specific cases, so in practice it is fine.
  */
 const highlighter = createHighlighterCoreSync({
-  themes: [githubDark],
-  langs: [javascript, typescript, tsx, json],
-  engine: createJavaScriptRegexEngine(),
+	themes: [githubDark],
+	langs: [javascript, typescript, tsx, json],
+	engine: createJavaScriptRegexEngine(),
 });
 
 export default highlighter;

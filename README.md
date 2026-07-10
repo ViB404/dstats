@@ -74,7 +74,7 @@ import { DiscordJSAdapter } from "@dstats/discord.js";
 import { Stats } from "@dstats/sdk";
 
 const client = new Client({
-  intents: []
+  intents: [],
 });
 
 await new Stats({
@@ -95,9 +95,9 @@ Guild joins and leaves are automatically tracked.
 
 Manage your bots and view analytics from the web dashboard.
 
-| Feature | Link |
-|---------|------|
-| Dashboard | https://dstats.havochz.xyz/dashboard |
+| Feature          | Link                                          |
+| ---------------- | --------------------------------------------- |
+| Dashboard        | https://dstats.havochz.xyz/dashboard          |
 | Generate API Key | https://dstats.havochz.xyz/dashboard/api-keys |
 
 Current dashboard features:
@@ -107,7 +107,6 @@ Current dashboard features:
 - Guild analytics
 - Join history
 - Leave history
-
 
 > 🚧 Additional analytics are under development.
 
@@ -138,9 +137,9 @@ Dashboard
 
 ## Packages
 
-| Package | Description |
-|---------|-------------|
-| `@dstats/sdk` | Core SDK |
+| Package              | Description        |
+| -------------------- | ------------------ |
+| `@dstats/sdk`        | Core SDK           |
 | `@dstats/discord.js` | Discord.js adapter |
 
 More adapters are planned 🥲.
