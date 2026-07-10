@@ -5,7 +5,7 @@ import reactCompiler from "eslint-plugin-react-compiler";
 
 export default defineConfig(
 	{
-		ignores: ["**/node_modules/", ".git/", "**/dist/", "**/.next/"],
+		files: ["**/*.{js,jsx,ts,tsx}"],
 	},
 	{
 		files: ["**/*.{js,ts}"],
