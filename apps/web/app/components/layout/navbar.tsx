@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Menu, X, Loader2 } from "lucide-react";
 import { SignInButton, UserButton, useAuth } from "@clerk/nextjs";
 import { Dialog } from "@base-ui/react";
+import Image from "next/image";
 
 export default function Navbar() {
 	const { isLoaded, isSignedIn } = useAuth();
@@ -17,8 +18,8 @@ export default function Navbar() {
 	return (
 		<nav className="fixed top-0 w-full z-50 bg-neutral/80 backdrop-blur-xl border-b border-white/10 shadow-sm h-20 flex items-center">
 			<div className="flex items-center justify-between px-4 md:px-12 h-full mx-auto w-full">
-				<Link href="/" className="font-headline text-2xl font-bold tracking-tighter text-white">
-					DStats
+				<Link href="/" className="flex items-center">
+					<Image src="/logo.svg" alt="DStats" width={140} height={32} priority className="h-8 w-auto" />
 				</Link>
 
 				<div className="hidden md:flex items-center gap-8">

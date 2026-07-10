@@ -61,7 +61,7 @@ export default function HeroSection() {
 
 					<motion.h1
 						variants={itemVariants}
-						className="text-5xl font-bold leading-tight tracking-tighter md:text-7xl text-white"
+						className="text-3xl font-headline font-extrabold leading-tight tracking-tighter md:text-5xl text-white"
 					>
 						Analytics for{" "}
 						<span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-secondary">

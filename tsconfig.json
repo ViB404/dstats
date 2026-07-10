@@ -24,9 +24,7 @@
 		"allowSyntheticDefaultImports": true,
 		"esModuleInterop": false,
 		"forceConsistentCasingInFileNames": true,
-		"isolatedModules": true,
-
-		"ignoreDeprecations": "6.0"
+		"isolatedModules": true
 	},
 	"exclude": ["node_modules"]
 }
