@@ -29,17 +29,14 @@ impl BotGuildRepository {
         RETURNING *
         "#,
         )
-            .bind(bot_id)
-            .bind(guild_id)
-            .bind(Utc::now())
-            .fetch_one(pool)
-            .await
+        .bind(bot_id)
+        .bind(guild_id)
+        .bind(Utc::now())
+        .fetch_one(pool)
+        .await
     }
 
-    pub async fn find_by_bot_id(
-        pool: &PgPool,
-        bot_id: Uuid,
-    ) -> Result<Vec<BotGuild>, sqlx::Error> {
+    pub async fn find_by_bot_id(pool: &PgPool, bot_id: Uuid) -> Result<Vec<BotGuild>, sqlx::Error> {
         sqlx::query_as::<_, BotGuild>(
             r#"
             SELECT *
@@ -47,15 +44,12 @@ impl BotGuildRepository {
             WHERE bot_id = $1
             "#,
         )
-            .bind(bot_id)
-            .fetch_all(pool)
-            .await
+        .bind(bot_id)
+        .fetch_all(pool)
+        .await
     }
 
-    pub async fn get_id_by_bot_id(
-        pool: &PgPool,
-        bot_id: i64,
-    ) -> Result<Option<Uuid>, sqlx::Error> {
+    pub async fn get_id_by_bot_id(pool: &PgPool, bot_id: i64) -> Result<Option<Uuid>, sqlx::Error> {
         sqlx::query_scalar(
             r#"
         SELECT id
@@ -63,9 +57,9 @@ impl BotGuildRepository {
         WHERE bot_id = $1
         "#,
         )
-            .bind(bot_id)
-            .fetch_optional(pool)
-            .await
+        .bind(bot_id)
+        .fetch_optional(pool)
+        .await
     }
 
     pub async fn get_id_by_discord_guild_id(
@@ -79,9 +73,9 @@ impl BotGuildRepository {
         WHERE discord_guild_id = $1
         "#,
         )
-            .bind(discord_guild_id)
-            .fetch_optional(pool)
-            .await
+        .bind(discord_guild_id)
+        .fetch_optional(pool)
+        .await
     }
 
     pub async fn find_link(
@@ -97,17 +91,13 @@ impl BotGuildRepository {
               AND guild_id = $2
             "#,
         )
-            .bind(bot_id)
-            .bind(guild_id)
-            .fetch_optional(pool)
-            .await
+        .bind(bot_id)
+        .bind(guild_id)
+        .fetch_optional(pool)
+        .await
     }
 
-    pub async fn mark_left(
-        pool: &PgPool,
-        bot_id: Uuid,
-        guild_id: Uuid,
-    ) -> Result<(), sqlx::Error> {
+    pub async fn mark_left(pool: &PgPool, bot_id: Uuid, guild_id: Uuid) -> Result<(), sqlx::Error> {
         sqlx::query(
             r#"
             UPDATE bot_guilds
@@ -116,11 +106,11 @@ impl BotGuildRepository {
               AND guild_id = $3
             "#,
         )
-            .bind(Utc::now())
-            .bind(bot_id)
-            .bind(guild_id)
-            .execute(pool)
-            .await?;
+        .bind(Utc::now())
+        .bind(bot_id)
+        .bind(guild_id)
+        .execute(pool)
+        .await?;
 
         Ok(())
     }

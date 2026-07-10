@@ -1,6 +1,6 @@
-use sqlx::postgres::PgPoolOptions;
 use anyhow::Result;
 use sqlx::PgPool;
+use sqlx::postgres::PgPoolOptions;
 
 pub async fn connect_db() -> Result<PgPool> {
     dotenv::dotenv().ok();

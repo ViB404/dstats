@@ -40,21 +40,18 @@ impl GuildRepository {
             RETURNING *
             "#,
         )
-            .bind(discord_guild_id)
-            .bind(name)
-            .bind(icon)
-            .bind(owner_id)
-            .bind(member_count)
-            .fetch_one(pool)
-            .await?;
+        .bind(discord_guild_id)
+        .bind(name)
+        .bind(icon)
+        .bind(owner_id)
+        .bind(member_count)
+        .fetch_one(pool)
+        .await?;
 
         Ok(guild)
     }
 
-    pub async fn find_by_id(
-        pool: &PgPool,
-        id: Uuid,
-    ) -> Result<Option<Guild>, sqlx::Error> {
+    pub async fn find_by_id(pool: &PgPool, id: Uuid) -> Result<Option<Guild>, sqlx::Error> {
         sqlx::query_as::<_, Guild>(
             r#"
             SELECT *
@@ -62,9 +59,9 @@ impl GuildRepository {
             WHERE id = $1
             "#,
         )
-            .bind(id)
-            .fetch_optional(pool)
-            .await
+        .bind(id)
+        .fetch_optional(pool)
+        .await
     }
 
     pub async fn find_by_discord_guild_id(
@@ -78,9 +75,9 @@ impl GuildRepository {
             WHERE discord_guild_id = $1
             "#,
         )
-            .bind(discord_guild_id)
-            .fetch_optional(pool)
-            .await
+        .bind(discord_guild_id)
+        .fetch_optional(pool)
+        .await
     }
 
     pub async fn update_member_count(
@@ -97,11 +94,11 @@ impl GuildRepository {
             WHERE id = $3
             "#,
         )
-            .bind(member_count)
-            .bind(Utc::now())
-            .bind(guild_id)
-            .execute(pool)
-            .await?;
+        .bind(member_count)
+        .bind(Utc::now())
+        .bind(guild_id)
+        .execute(pool)
+        .await?;
 
         Ok(())
     }
@@ -131,10 +128,10 @@ impl GuildRepository {
         OFFSET $3
         "#,
         )
-            .bind(bot_id)
-            .bind(limit)
-            .bind(offset)
-            .fetch_all(pool)
-            .await
+        .bind(bot_id)
+        .bind(limit)
+        .bind(offset)
+        .fetch_all(pool)
+        .await
     }
 }

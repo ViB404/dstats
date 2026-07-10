@@ -4,6 +4,8 @@ use crate::route::guild::{guild_info, guild_join, guild_leave};
 use crate::route::middleware::middleware;
 use crate::route::status::status;
 
+use std::env;
+
 use axum::Router;
 use axum::http::header::CONTENT_TYPE;
 use axum::http::{HeaderName, HeaderValue, Method};
@@ -43,8 +45,11 @@ async fn main() -> anyhow::Result<()> {
     let pool = connect_db().await?;
     let app_state = AppState { pool };
 
+    let frontend_url =
+        env::var("FRONTEND_URL").unwrap_or_else(|_| "https://dstats.havochz.xyz".to_string());
+
     let cors = CorsLayer::new()
-        .allow_origin("https://dstats.havochz.xyz".parse::<HeaderValue>()?)
+        .allow_origin(frontend_url.parse::<HeaderValue>()?)
         .allow_methods([Method::GET, Method::POST, Method::PUT, Method::DELETE])
         .allow_headers([CONTENT_TYPE, HeaderName::from_static("x-api-key")]);
 
