@@ -1,7 +1,4 @@
-use axum::{
-    http::StatusCode,
-    Json,
-};
+use axum::{Json, http::StatusCode};
 use serde::Serialize;
 
 #[derive(Debug, Serialize)]
@@ -16,9 +13,7 @@ pub struct ApiMessage {
     pub message: String,
 }
 
-pub fn ok<T: Serialize>(
-    data: T,
-) -> (StatusCode, Json<ApiResponse<T>>) {
+pub fn ok<T: Serialize>(data: T) -> (StatusCode, Json<ApiResponse<T>>) {
     (
         StatusCode::OK,
         Json(ApiResponse {
@@ -28,9 +23,7 @@ pub fn ok<T: Serialize>(
     )
 }
 
-pub fn created<T: Serialize>(
-    data: T,
-) -> (StatusCode, Json<ApiResponse<T>>) {
+pub fn created<T: Serialize>(data: T) -> (StatusCode, Json<ApiResponse<T>>) {
     (
         StatusCode::CREATED,
         Json(ApiResponse {

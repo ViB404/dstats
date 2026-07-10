@@ -44,7 +44,7 @@
 			"prettier --write"
 		],
 		"*.rs": [
-			"cargo fmt"
+			"sh -c 'cargo fmt --manifest-path apps/api/Cargo.toml --all'"
 		]
 	},
 	"devDependencies": {

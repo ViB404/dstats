@@ -1,6 +1,6 @@
+use serde_json::Value;
 use sqlx::PgPool;
 use uuid::Uuid;
-use serde_json::Value;
 
 use crate::models::events_model::{Event, EventType};
 
@@ -26,18 +26,15 @@ impl EventRepository {
             RETURNING *
             "#,
         )
-            .bind(bot_id)
-            .bind(guild_id)
-            .bind(event_type)
-            .bind(payload)
-            .fetch_one(pool)
-            .await
+        .bind(bot_id)
+        .bind(guild_id)
+        .bind(event_type)
+        .bind(payload)
+        .fetch_one(pool)
+        .await
     }
 
-    pub async fn find_by_bot_id(
-        pool: &PgPool,
-        bot_id: Uuid,
-    ) -> Result<Vec<Event>, sqlx::Error> {
+    pub async fn find_by_bot_id(pool: &PgPool, bot_id: Uuid) -> Result<Vec<Event>, sqlx::Error> {
         sqlx::query_as::<_, Event>(
             r#"
             SELECT *
@@ -46,9 +43,9 @@ impl EventRepository {
             ORDER BY created_at DESC
             "#,
         )
-            .bind(bot_id)
-            .fetch_all(pool)
-            .await
+        .bind(bot_id)
+        .fetch_all(pool)
+        .await
     }
 
     pub async fn find_by_guild_id(
@@ -63,9 +60,9 @@ impl EventRepository {
             ORDER BY created_at DESC
             "#,
         )
-            .bind(guild_id)
-            .fetch_all(pool)
-            .await
+        .bind(guild_id)
+        .fetch_all(pool)
+        .await
     }
 
     pub async fn find_recent_by_bot_id(
@@ -84,17 +81,14 @@ impl EventRepository {
         OFFSET $3
         "#,
         )
-            .bind(bot_id)
-            .bind(limit)
-            .bind(offset)
-            .fetch_all(pool)
-            .await
+        .bind(bot_id)
+        .bind(limit)
+        .bind(offset)
+        .fetch_all(pool)
+        .await
     }
 
-    pub async fn count_by_bot(
-        pool: &PgPool,
-        bot_id: Uuid,
-    ) -> Result<i64, sqlx::Error> {
+    pub async fn count_by_bot(pool: &PgPool, bot_id: Uuid) -> Result<i64, sqlx::Error> {
         let count: i64 = sqlx::query_scalar(
             r#"
             SELECT COUNT(*)
@@ -102,17 +96,14 @@ impl EventRepository {
             WHERE bot_id = $1
             "#,
         )
-            .bind(bot_id)
-            .fetch_one(pool)
-            .await?;
+        .bind(bot_id)
+        .fetch_one(pool)
+        .await?;
 
         Ok(count)
     }
 
-    pub async fn count_by_type(
-        pool: &PgPool,
-        event_type: EventType,
-    ) -> Result<i64, sqlx::Error> {
+    pub async fn count_by_type(pool: &PgPool, event_type: EventType) -> Result<i64, sqlx::Error> {
         let count: i64 = sqlx::query_scalar(
             r#"
             SELECT COUNT(*)
@@ -120,9 +111,9 @@ impl EventRepository {
             WHERE event_type = $1
             "#,
         )
-            .bind(event_type)
-            .fetch_one(pool)
-            .await?;
+        .bind(event_type)
+        .fetch_one(pool)
+        .await?;
 
         Ok(count)
     }

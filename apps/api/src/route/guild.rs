@@ -54,12 +54,7 @@ pub async fn guild_leave(
     Extension(bot): Extension<Bot>,
     Json(payload): Json<GuildLeaveRequest>,
 ) -> Result<impl IntoResponse, AppError> {
-    GuildService::guild_leave(
-        &state.pool,
-        bot.id,
-        parse_snowflake(payload.guild_id)?,
-    )
-    .await
+    GuildService::guild_leave(&state.pool, bot.id, parse_snowflake(payload.guild_id)?).await
 }
 
 #[derive(Deserialize, Serialize)]
@@ -76,13 +71,7 @@ pub async fn guild_info(
     let page = pagination.page.max(1);
     let per_page = pagination.per_page.clamp(1, 100);
 
-    let data = GuildService::guild_info(
-        &state.pool,
-        bot.id,
-        page,
-        per_page,
-    )
-    .await?;
+    let data = GuildService::guild_info(&state.pool, bot.id, page, per_page).await?;
 
     Ok(response::ok(data))
 }
