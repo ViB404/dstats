@@ -148,6 +148,31 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
 
+  playground:
+    dependencies:
+      '@dstats/discord.js':
+        specifier: workspace:*
+        version: link:../packages/discord.js
+      '@dstats/sdk':
+        specifier: workspace:*
+        version: link:../packages/sdk
+      discord.js:
+        specifier: ^14.26.4
+        version: 14.26.4
+      dotenv:
+        specifier: ^17.4.2
+        version: 17.4.2
+    devDependencies:
+      '@types/node':
+        specifier: ^25
+        version: 25.9.3
+      tsx:
+        specifier: ^4
+        version: 4.22.4
+      typescript:
+        specifier: ^5
+        version: 5.9.3
+
 packages:
 
   '@alloc/quick-lru@5.2.0':
@@ -5376,7 +5401,6 @@ snapshots:
       '@esbuild/win32-arm64': 0.28.1
       '@esbuild/win32-ia32': 0.28.1
       '@esbuild/win32-x64': 0.28.1
-    optional: true
 
   escalade@3.2.0: {}
 
@@ -6813,7 +6837,6 @@ snapshots:
       esbuild: 0.28.1
     optionalDependencies:
       fsevents: 2.3.3
-    optional: true
 
   turbo@2.10.3:
     optionalDependencies:
