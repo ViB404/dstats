@@ -2,7 +2,7 @@
 
 # DStats
 
-**Simple, privacy-first Discord bot analytics.**
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=Mona+Sans&weight=600&size=20&pause=2000&color=17F716&background=FFFFFF00&center=true&vCenter=true&width=435&height=30&lines=Simple%2C+privacy-first+Discord+bot+analytics.)](https://git.io/typing-svg)
 
 [![Status](https://img.shields.io/badge/Status-Active%20Development-orange?style=for-the-badge)](https://github.com/ViB404/dstats)
 [![Discord.js](https://img.shields.io/badge/Discord.js-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.js.org/)
@@ -25,22 +25,16 @@ DStats is a lightweight analytics platform for Discord bots.
 
 Instead of building your own analytics pipeline, DStats lets you collect useful statistics with a few lines of code.
 
-Current features include:
-
-- Guild join tracking
-- Guild leave tracking
-- Analytics dashboard
-- API key authentication
-- Discord.js adapter
-
 ---
 
 ## Features
 
-- 📈 Guild growth analytics (Not working for now)
-- 🚪 Guild join & leave tracking
+- 📈 Guild growth analytics (Coming Soon!)
+- 🚪 Guild join tracking
+- 🚪 Guild leave tracking
+- 📊 Clean analytics web dashboard
 - 🔒 Secure API key authentication
-- 📊 Clean web dashboard
+- ⚡ Discord.js adapter
 
 ---
 
@@ -67,6 +61,13 @@ yarn add @dstats/sdk @dstats/discord.js
 ---
 
 ## Quick Start
+
+### Prerequisites
+- Node.js 18+
+- A Discord bot with a valid token
+- A DStats API key — [generate one here](https://dstats.havochz.xyz/dashboard/api-keys)
+
+### Setup
 
 ```ts
 import { Client } from "discord.js";
@@ -113,25 +114,15 @@ Current dashboard features:
 ---
 
 ## Architecture
-
-```
-Discord Bot
-      │
-      ▼
-Discord.js Adapter
-      │
-      ▼
-DStats SDK
-      │
-      ▼
-DStats API
-      │
-      ▼
-PostgreSQL
-      │
-      ▼
-Dashboard
-```
+  
+  ```mermaid
+  graph TD
+      A[Discord Bot] --> B[Discord.js Adapter]
+      B --> C[DStats SDK]
+      C --> D[DStats API]
+      D --> E[(PostgreSQL)]
+      E --> F[Dashboard]
+  ```
 
 ---
 
