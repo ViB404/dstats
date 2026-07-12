@@ -64,7 +64,6 @@ yarn add @dstats/sdk @dstats/discord.js
 
 ### Prerequisites
 - Node.js 18+
-- A Discord bot with a valid token
 - A DStats API key — [generate one here](https://dstats.havochz.xyz/dashboard/api-keys)
 
 ### Setup
