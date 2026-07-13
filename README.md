@@ -63,6 +63,7 @@ yarn add @dstats/sdk @dstats/discord.js
 ## Quick Start
 
 ### Prerequisites
+
 - Node.js 18+
 - A DStats API key — [generate one here](https://dstats.havochz.xyz/dashboard/api-keys)
 
@@ -113,15 +114,15 @@ Current dashboard features:
 ---
 
 ## Architecture
-  
-  ```mermaid
-  graph TD
-      A[Discord Bot] --> B[Discord.js Adapter]
-      B --> C[DStats SDK]
-      C --> D[DStats API]
-      D --> E[(PostgreSQL)]
-      E --> F[Dashboard]
-  ```
+
+```mermaid
+graph TD
+    A[Discord Bot] --> B[Discord.js Adapter]
+    B --> C[DStats SDK]
+    C --> D[DStats API]
+    D --> E[(PostgreSQL)]
+    E --> F[Dashboard]
+```
 
 ---
 
