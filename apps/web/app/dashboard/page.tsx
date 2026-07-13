@@ -341,12 +341,6 @@ export default function DashboardPage() {
 											</span>
 										</div>
 										<div className="flex justify-between items-center">
-											<span className="text-neutral-500">Owner ID:</span>
-											<span className="text-neutral-300 font-mono">
-												{botData?.owner_id || "..."}
-											</span>
-										</div>
-										<div className="flex justify-between items-center">
 											<span className="text-neutral-500">Created:</span>
 											<span className="text-neutral-300">
 												{botData?.created_at
@@ -429,20 +423,6 @@ export default function DashboardPage() {
 														<h3 className="text-white font-semibold text-lg line-clamp-1 group-hover:text-[#7F7EFF] transition-colors">
 															{guild.name || "Unknown Guild"}
 														</h3>
-														<div className="mt-2 space-y-1">
-															<p className="text-xs text-neutral-500 font-mono flex items-center justify-between bg-white/5 p-1.5 rounded">
-																<span>ID:</span>
-																<span className="text-neutral-400">
-																	{guild.discord_guild_id}
-																</span>
-															</p>
-															<p className="text-xs text-neutral-500 font-mono flex items-center justify-between bg-white/5 p-1.5 rounded">
-																<span>Owner:</span>
-																<span className="text-neutral-400">
-																	{guild.owner_id}
-																</span>
-															</p>
-														</div>
 													</div>
 
 													<div className="mt-auto pt-4 border-t border-white/5 flex items-center justify-between text-xs">
