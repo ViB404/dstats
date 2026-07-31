@@ -30,9 +30,8 @@ Instead of building your own analytics pipeline, DStats lets you collect useful 
 ## Features
 
 - 📈 Guild growth analytics (Coming Soon!)
-- 🚪 Guild join tracking
-- 🚪 Guild leave tracking
-- 📊 Clean analytics web dashboard
+- 🚪 Guild join and leave tracking
+- 🖥️ Clean analytics web dashboard
 - 🔒 Secure API key authentication
 - ⚡ Discord.js adapter
 
@@ -78,7 +77,7 @@ const client = new Client({
   intents: [],
 });
 
-await new Stats({
+new Stats({
   apiKey: process.env.DSTATS_API_KEY!,
   adapter: new DiscordJSAdapter(client),
 });
@@ -86,9 +85,7 @@ await new Stats({
 client.login(process.env.DISCORD_TOKEN);
 ```
 
-That's it.
-
-Guild joins and leaves are automatically tracked.
+That's it. Guild joins, leaves, and stats are automatically tracked.
 
 ---
 
@@ -108,6 +105,7 @@ Current dashboard features:
 - Guild analytics
 - Join history
 - Leave history
+- Simple stats (total guilds, guild leaves, active guilds)
 
 > 🚧 Additional analytics are under development.
 
@@ -139,7 +137,7 @@ More adapters are planned 🥲.
 
 ## API
 
-Current endpoints
+Current endpoints:
 
 ```
 POST /v1/register
@@ -149,6 +147,8 @@ POST /v1/guild/leave
 
 GET /v1/bot
 GET /v1/guilds
+
+GET /v1/stats
 ```
 
 ---
@@ -181,6 +181,7 @@ GET /v1/guilds
 - [x] Dashboard
 - [x] API authentication
 - [x] Discord.js adapter
+- [x] Simple stats (total guilds, leaves, active guilds)
 - [ ] Charts
 - [ ] Daily analytics
 - [ ] Slash command analytics
@@ -238,6 +239,24 @@ DStats is currently under active development.
 Breaking changes may occur until the first stable release.
 
 If you're using DStats today, expect APIs and SDKs to evolve as new features are added.
+
+---
+
+## Contributors
+
+<div align="center">
+<a href="https://github.com/ViB404/dstats/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=ViB404/dstats" />
+</a>
+
+Made with [contrib.rocks](https://contrib.rocks).
+</div>
+
+---
+
+# Disclaimer
+
+DStats is not affiliated, associated, authorized, endorsed by, or in any way officially connected with Discord Inc., or any of its subsidiaries or affiliates.
 
 ---
 
