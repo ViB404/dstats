@@ -12,6 +12,7 @@ use axum::http::{HeaderName, HeaderValue, Method};
 use axum::middleware::from_fn_with_state;
 use axum::routing::{get, post};
 
+use crate::route::stats::stats;
 use log::info;
 use sqlx::PgPool;
 use std::net::SocketAddr;
@@ -58,6 +59,7 @@ async fn main() -> anyhow::Result<()> {
         .route("/v1/guild/leave", post(guild_leave))
         .route("/v1/bot", get(get_bot_info))
         .route("/v1/guilds", get(guild_info))
+        .route("/v1/stats", get(stats))
         .route_layer(from_fn_with_state(app_state.clone(), middleware));
 
     let public_route = Router::new()
