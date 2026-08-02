@@ -1,9 +1,12 @@
 import type { Metadata, Viewport } from "next";
 import { Syne, Poppins, JetBrains_Mono } from "next/font/google";
-import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Analytics } from "@vercel/analytics/next";
 import { Toaster } from "sonner";
+
+import QueryProvider from "@/providers/query_provider";
+
+import "./globals.css";
 
 const syne = Syne({
 	variable: "--font-syne",
@@ -34,8 +37,16 @@ export const metadata: Metadata = {
 	},
 	icons: {
 		icon: [
-			{ url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-			{ url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+			{
+				url: "/favicon-16x16.png",
+				sizes: "16x16",
+				type: "image/png",
+			},
+			{
+				url: "/favicon-32x32.png",
+				sizes: "32x32",
+				type: "image/png",
+			},
 		],
 		apple: "/apple-touch-icon.png",
 	},
@@ -58,9 +69,13 @@ export default function RootLayout({
 		<ClerkProvider>
 			<html lang="en" className={`dark ${syne.variable} ${poppins.variable} ${jetbrainsMono.variable}`}>
 				<body suppressHydrationWarning className="min-h-screen flex flex-col bg-neutral font-sans">
-					{children}
-					<Toaster richColors position="top-right" />
-					<Analytics />
+					<QueryProvider>
+						{children}
+
+						<Toaster richColors position="top-right" />
+
+						<Analytics />
+					</QueryProvider>
 				</body>
 			</html>
 		</ClerkProvider>

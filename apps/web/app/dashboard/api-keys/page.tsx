@@ -9,8 +9,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import Navbar from "@/app/components/layout/navbar";
-import Footer from "@/app/components/layout/footer";
+import Navbar from "@/components/layout/navbar";
+import Footer from "@/components/layout/footer";
 
 export default function GenerateKeyPage() {
 	const [isMounted, setIsMounted] = useState(false);
