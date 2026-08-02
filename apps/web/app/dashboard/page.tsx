@@ -1,45 +1,73 @@
 "use client";
 
 import { Key, Loader2 } from "lucide-react";
-import Navbar from "../components/layout/navbar";
-import Footer from "../components/layout/footer";
 import { motion, Variants } from "framer-motion";
-import { useDashboardData } from "@/hooks/use_dashboard_data";
-import ApiKeyModal from "../components/dashboard/api_key_modal";
 import { Button } from "@base-ui/react";
-import StatsCards from "../components/dashboard/stats_cards";
-import BotSummaryCard from "../components/dashboard/bot_summary_card";
-import GuildGrid from "../components/dashboard/guild_grid";
+
+import Navbar from "@/components/layout/navbar";
+import Footer from "@/components/layout/footer";
+
+import ApiKeyModal from "@/components/dashboard/api_key_modal";
+import OverviewStatsCards from "@/components/dashboard/overview_card";
+import BotSummaryCard from "@/components/dashboard/bot_summary_card";
+import ChartsContainer from "@/components/dashboard/chart_container";
+import GuildGrid from "@/components/dashboard/guild_grid";
+
+import { useDashboardData } from "@/hooks/use_dashboard_data";
+import { useBot } from "@/hooks/use_bot";
+import { useStats } from "@/hooks/use_stats";
+import { useGuilds } from "@/hooks/use_guilds";
 
 const containerVariants: Variants = {
-	hidden: { opacity: 0 },
-	show: { opacity: 1, transition: { staggerChildren: 0.08 } },
+	hidden: {
+		opacity: 0,
+	},
+	show: {
+		opacity: 1,
+		transition: {
+			staggerChildren: 0.08,
+		},
+	},
 };
 
 export default function DashboardPage() {
 	const {
+		apiKey,
+
 		isMounted,
+
 		isModalOpen,
 		setIsModalOpen,
+
 		inputKey,
 		setInputKey,
+
 		isSavingKey,
 		handleSaveKey,
-
-		botData,
-		stats,
-		guilds,
-
-		isLoading,
-		isFetchingMore,
-		hasMore,
-		loadMore,
 	} = useDashboardData();
 
-	if (!isMounted) return null;
+	const bot = useBot(apiKey);
+	const stats = useStats(apiKey);
+	const guilds = useGuilds(apiKey);
+
+	if (!isMounted) {
+		return null;
+	}
+
+	const isLoading = bot.isLoading || stats.isLoading || guilds.isLoading;
+
+	const hasError = bot.isError || stats.isError || guilds.isError;
+
+	if (hasError) {
+		return (
+			<div className="min-h-screen flex items-center justify-center bg-neutral-950 text-white">
+				<p>Failed to load dashboard.</p>
+			</div>
+		);
+	}
 
 	return (
-		<div className="bg-neutral-950 min-h-screen flex flex-col font-sans">
+		<div className="min-h-screen bg-neutral-950 font-sans">
 			<Navbar />
 
 			<ApiKeyModal
@@ -51,53 +79,55 @@ export default function DashboardPage() {
 				isSaving={isSavingKey}
 			/>
 
-			<main className="grow w-full max-w-7xl mx-auto px-4 md:px-12 pt-32 pb-12">
-				{isLoading && guilds.length === 0 ? (
-					<div className="w-full h-[60vh] flex flex-col items-center justify-center text-neutral-500 gap-4">
-						<Loader2 className="w-10 h-10 animate-spin text-[#7F7EFF]" />
-						<p className="font-mono text-sm tracking-widest uppercase">Fetching Analytics...</p>
+			<main className="mx-auto flex w-full max-w-7xl grow flex-col px-4 pt-32 pb-12 md:px-12">
+				{isLoading ? (
+					<div className="flex h-[60vh] flex-col items-center justify-center gap-4 text-neutral-500">
+						<Loader2 className="h-10 w-10 animate-spin text-[#7F7EFF]" />
+
+						<p className="font-mono text-sm uppercase tracking-widest">Fetching Analytics...</p>
 					</div>
 				) : (
-					<motion.div
-						variants={containerVariants}
-						initial="hidden"
-						animate="show"
-						className="space-y-10 w-full"
-					>
-						<header className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-white/5">
+					<motion.div initial="hidden" animate="show" variants={containerVariants} className="space-y-10">
+						<header className="flex flex-col justify-between gap-6 border-b border-white/5 pb-6 md:flex-row md:items-end">
 							<div className="space-y-2">
-								<span className="text-xs font-semibold text-[#7F7EFF] tracking-widest uppercase">
+								<span className="text-xs font-semibold uppercase tracking-widest text-[#7F7EFF]">
 									System Analytics
 								</span>
-								<h1 className="text-4xl md:text-5xl font-bold text-white tracking-tight">
+
+								<h1 className="text-4xl font-bold tracking-tight text-white md:text-5xl">
 									Dashboard Overview
 								</h1>
 							</div>
+
 							<Button
 								onClick={() => setIsModalOpen(true)}
-								className="bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-xl px-4 py-6 flex items-center gap-2 transition-all active:scale-95"
+								className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-5 py-6 text-white transition-all hover:bg-white/10 active:scale-95"
 							>
-								<Key className="w-4 h-4 text-[#7F7EFF]" />
+								<Key className="h-4 w-4 text-[#7F7EFF]" />
 								Update API Key
 							</Button>
 						</header>
 
-						<div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-							<StatsCards stats={stats} />
-							<BotSummaryCard botData={botData} />
+						<div className="grid grid-cols-1 gap-6 xl:grid-cols-[2fr_360px]">
+							<OverviewStatsCards stats={stats.data} />
+
+							<BotSummaryCard botData={bot.data} />
 						</div>
+
+						<ChartsContainer stats={stats.data} />
 
 						<hr className="border-white/5" />
 
 						<GuildGrid
-							guilds={guilds}
-							hasMore={hasMore}
-							isFetchingMore={isFetchingMore}
-							onLoadMoreAction={loadMore}
+							guilds={guilds.data ?? []}
+							hasMore={false}
+							isFetchingMore={guilds.isFetching}
+							onLoadMoreAction={() => {}}
 						/>
 					</motion.div>
 				)}
 			</main>
+
 			<Footer />
 		</div>
 	);
