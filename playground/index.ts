@@ -12,6 +12,8 @@ const client = new Client({
 new Stats({
 	apiKey: process.env.DSTATS_API!,
 	adapter: new DiscordJSAdapter(client),
+	debug: true,
+	baseUrl: "http://localhost:7878",
 });
 
 client.login(process.env.DISCORD_BOT_TOKEN);

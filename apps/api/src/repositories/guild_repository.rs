@@ -24,7 +24,6 @@ impl GuildRepository {
         discord_guild_id: i64,
         name: String,
         icon: Option<String>,
-        owner_id: i64,
         member_count: i32,
     ) -> Result<Guild, sqlx::Error> {
         let guild = sqlx::query_as::<_, Guild>(
@@ -33,17 +32,15 @@ impl GuildRepository {
                 discord_guild_id,
                 name,
                 icon,
-                owner_id,
                 last_member_count
             )
-            VALUES ($1, $2, $3, $4, $5)
+            VALUES ($1, $2, $3, $4)
             RETURNING *
             "#,
         )
         .bind(discord_guild_id)
         .bind(name)
         .bind(icon)
-        .bind(owner_id)
         .bind(member_count)
         .fetch_one(pool)
         .await?;

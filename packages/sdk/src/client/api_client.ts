@@ -1,4 +1,5 @@
 import { GuildJoinPayload, GuildLeavePayload } from "../types";
+import { logger } from "../utils/logger";
 
 export class ApiClient {
 	constructor(
@@ -8,21 +9,26 @@ export class ApiClient {
 
 	private async request(path: string, body: unknown): Promise<void> {
 		try {
+			logger.log(`POST ${path}`, body);
+
 			const response = await fetch(`${this.baseUrl}${path}`, {
 				method: "POST",
 				headers: {
-					"X-API-Key": `${this.apiKey}`,
+					"X-API-Key": this.apiKey,
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify(body),
-				signal: AbortSignal.timeout(5000),
+				signal: AbortSignal.timeout(15_000),
 			});
 
 			if (!response.ok) {
-				// console.warn(`[DStats] ${response.status}`, await response.text());
+				logger.warn(`Request failed (${response.status})`, await response.text());
+				return;
 			}
-		} catch {
-			// console.warn("[DStats] Failed to send analytics", error);
+
+			logger.log(`Request successful (${response.status})`);
+		} catch (error) {
+			logger.error("Failed to send analytics:", error);
 		}
 	}
 

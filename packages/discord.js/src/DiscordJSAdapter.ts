@@ -22,7 +22,6 @@ export class DiscordJSAdapter implements Adapter {
 				name: guild.name,
 				icon: guild.iconURL() ?? null,
 				member_count: guild.memberCount,
-				owner_id: guild.ownerId,
 			});
 		});
 	}
