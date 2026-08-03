@@ -1,16 +1,21 @@
 import type { Adapter } from "./adapters/Adapter";
 import { ApiClient } from "./client/api_client";
 import { GuildJoinPayload, GuildLeavePayload } from "./types/index";
+import { logger } from "./utils/logger";
 
 export interface StatsOptions {
 	apiKey: string;
 	adapter: Adapter;
 	baseUrl?: string;
+	debug?: boolean;
 }
 
 export class Stats {
 	private readonly apiClient: ApiClient;
+
 	public constructor(private readonly options: StatsOptions) {
+		logger.setDebug(options.debug ?? false);
+
 		this.apiClient = new ApiClient(options.baseUrl ?? "https://api.havochz.xyz", options.apiKey);
 		this.registerEvents();
 	}
@@ -26,7 +31,6 @@ export class Stats {
 				name: guildInfo.name,
 				icon: guildInfo.icon,
 				member_count: guildInfo.member_count,
-				owner_id: guildInfo.owner_id,
 			};
 
 			this.apiClient.guildJoin(payload).catch(e => console.error(e));

@@ -68,7 +68,7 @@ const client = new Client({
   intents: [],
 });
 
-await new Stats({
+new Stats({
   apiKey: process.env.DSTATS_API_KEY!,
   adapter: new DiscordJSAdapter(client),
 });

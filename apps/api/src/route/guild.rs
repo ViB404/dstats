@@ -15,7 +15,6 @@ pub struct GuildJoinRequest {
     discord_guild_id: String,
     name: String,
     icon: Option<String>,
-    owner_id: String,
     member_count: i32,
 }
 
@@ -28,7 +27,6 @@ pub async fn guild_join(
         discord_guild_id,
         name,
         icon,
-        owner_id,
         member_count,
     } = payload;
 
@@ -37,7 +35,6 @@ pub async fn guild_join(
         discord_guild_id: parse_snowflake(discord_guild_id)?,
         name,
         icon,
-        owner_id: parse_snowflake(owner_id)?,
         member_count,
     };
 

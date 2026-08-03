@@ -1,7 +1,7 @@
 {
 	"name": "@dstats/sdk",
 	"description": "Official TypeScript SDK for DStats. Collect Discord bot analytics with a simple adapter-based API.",
-	"version": "0.0.2",
+	"version": "0.1.2",
 	"type": "module",
 	"exports": {
 		".": {

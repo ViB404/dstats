@@ -16,7 +16,6 @@ pub struct CreateGuildJoin {
     pub discord_guild_id: i64,
     pub name: String,
     pub icon: Option<String>,
-    pub owner_id: i64,
     pub member_count: i32,
 }
 
@@ -31,7 +30,6 @@ impl GuildService {
                         data.discord_guild_id,
                         data.name,
                         data.icon,
-                        data.owner_id,
                         data.member_count,
                     )
                     .await?
