@@ -40,15 +40,15 @@ const cards = (stats?: Stats) => [
 		title: "Guilds Left",
 		value: stats?.overview.guilds_left?.toLocaleString() ?? "-",
 		icon: TrendingDown,
-		iconColor: "text-red-400",
-		valueColor: "text-red-400",
+		iconColor: "text-destructive",
+		valueColor: "text-destructive",
 	},
 	{
 		title: "Total Guilds",
 		value: stats?.overview.guilds_joined?.toLocaleString() ?? "-",
 		icon: Building2,
-		iconColor: "text-[#7F7EFF]",
-		valueColor: "text-white",
+		iconColor: "text-[var(--color-primary)]",
+		valueColor: "text-foreground",
 	},
 ];
 
