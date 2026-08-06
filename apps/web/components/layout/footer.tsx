@@ -10,25 +10,13 @@ export default function Footer() {
 				</div>
 				<div className="flex flex-wrap gap-x-8 gap-y-4 md:justify-end">
 					<Link
-						href="/privacy"
-						className="text-sm font-mono text-neutral-500 hover:text-[#7F7EFF] transition-colors"
-					>
-						Privacy Policy
-					</Link>
-					<Link
-						href="/terms"
-						className="text-sm font-mono text-neutral-500 hover:text-[#7F7EFF] transition-colors"
-					>
-						Terms of Service
-					</Link>
-					<Link
 						href="/discord"
 						className="text-sm font-mono text-neutral-500 hover:text-[#7F7EFF] transition-colors"
 					>
 						Discord
 					</Link>
 					<Link
-						href="/status"
+						href="/coming_soon"
 						className="text-sm font-mono text-neutral-500 hover:text-[#7F7EFF] transition-colors"
 					>
 						Status

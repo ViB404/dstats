@@ -51,7 +51,7 @@ export default function HeroSection() {
 				<div className="flex flex-col gap-8">
 					<motion.div
 						variants={itemVariants}
-						className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 w-fit"
+						className="inline-flex items-center gap-2 rounded-full border border-primary/20 px-3 py-1 w-fit"
 					>
 						<span className="flex h-2 w-2 rounded-full bg-primary animate-pulse"></span>
 						<span className="font-mono text-xs font-bold uppercase tracking-widest text-primary">
@@ -82,7 +82,7 @@ export default function HeroSection() {
 						<Button
 							nativeButton={false}
 							className="rounded-xl border border-white/10 bg-white/5 px-8 py-5 font-semibold text-white transition-all hover:bg-white/10"
-							render={<Link href="/docs" />}
+							render={<Link href="/coming_soon" />}
 						>
 							Read Documentation
 						</Button>
@@ -93,7 +93,7 @@ export default function HeroSection() {
 					variants={itemVariants}
 					className="relative aspect-square w-full lg:aspect-auto perspective-1000"
 				>
-					<div className="absolute -inset-10 rounded-full bg-primary/10 blur-[100px]" />
+					<div className="absolute -inset-10 rounded-full blur-[100px]" />
 					<motion.div
 						style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
 						onMouseMove={handleMouse}

@@ -34,28 +34,28 @@ export default function CodePreview() {
 
 	return (
 		<section className="mx-auto w-full max-w-7xl px-4 py-20 md:px-12">
-			<div className="overflow-hidden rounded-2xl border border-white/10 bg-white/3 shadow-[0_0_80px_-20px_rgba(127,126,255,0.15)]">
-				<div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
+			<div className="relative overflow-hidden rounded-2xl border border-(--color-primary)/20 bg-card shadow-[0_20px_50px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.1)_inset,0_10px_20px_rgba(110,140,251,0.08)]">
+				<div className="flex items-center justify-between border-b border-border bg-muted/40 px-6 py-4 backdrop-blur-md">
 					<div className="flex items-center gap-2">
-						<div className="h-3 w-3 rounded-full bg-red-500/40" />
-						<div className="h-3 w-3 rounded-full bg-yellow-500/40" />
-						<div className="h-3 w-3 rounded-full bg-[#7F7EFF]/40" />
+						<div className="h-3 w-3 rounded-full bg-destructive/60" />
+						<div className="h-3 w-3 rounded-full bg-amber-500/60" />
+						<div className="h-3 w-3 rounded-full bg-primary/60" />
 
-						<span className="ml-4 font-mono text-sm text-neutral-400">index.ts</span>
+						<span className="ml-4 font-label text-sm text-muted-foreground">index.ts</span>
 					</div>
 
 					<button
 						type="button"
 						onClick={handleCopy}
-						className="text-neutral-400 transition-colors hover:text-white"
+						className="text-muted-foreground transition-colors hover:text-foreground"
 						aria-label="Copy code"
 					>
-						{copied ? <Check className="h-4 w-4 text-green-400" /> : <Copy className="h-4 w-4" />}
+						{copied ? <Check className="h-4 w-4 text-emerald-400" /> : <Copy className="h-4 w-4" />}
 					</button>
 				</div>
 
-				<pre className="overflow-x-auto p-8">
-					<code className="font-mono text-sm leading-relaxed text-neutral-200">
+				<pre className="overflow-x-auto bg-card p-8">
+					<code className="font-label text-sm leading-relaxed text-card-foreground">
 						<CodeBlock
 							code={code}
 							lang="typescript"
@@ -66,7 +66,7 @@ export default function CodePreview() {
 					</code>
 				</pre>
 
-				<div className="border-t border-white/10 bg-[#121212] p-6 text-sm italic text-neutral-400">
+				<div className="border-t border-border bg-sidebar/80 p-6 font-sans text-sm italic text-muted-foreground">
 					{
 						"That's it. DStats automatically tracks guild joins, guild leaves, and bot activity - no additional code required."
 					}

@@ -10,7 +10,7 @@ export default function Navbar() {
 	const { isLoaded, isSignedIn } = useAuth();
 
 	const links = [
-		{ name: "Docs", href: "/docs" },
+		{ name: "Docs", href: "/coming_soon" },
 		{ name: "GitHub", href: "https://www.github.com/vib404/dstats" },
 		{ name: "Dashboard", href: "/dashboard" },
 	];

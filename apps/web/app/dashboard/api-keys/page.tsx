@@ -96,22 +96,24 @@ export default function GenerateKeyPage() {
 	if (!isMounted) return null;
 
 	return (
-		<div className="bg-neutral-950 min-h-screen flex flex-col font-sans">
+		<div className="bg-background min-h-screen flex flex-col font-sans text-foreground">
 			<Navbar />
 
 			<main className="grow relative flex w-full flex-col items-center justify-center px-4 md:px-12 py-24 overflow-hidden">
-				<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#7F7EFF]/10 rounded-full blur-[120px] pointer-events-none"></div>
+				<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-(--color-primary)/10 rounded-full blur-[120px] pointer-events-none"></div>
 
 				<div className="z-10 flex w-full max-w-lg flex-col items-center text-center">
 					<div className="mb-10">
-						<h1 className="mb-3 text-4xl font-extrabold tracking-tight text-white">API Access</h1>
-						<p className="mx-auto max-w-sm text-neutral-400">
+						<h1 className="mb-3 text-4xl font-heading font-extrabold tracking-tight text-foreground">
+							API Access
+						</h1>
+						<p className="mx-auto max-w-sm text-muted-foreground">
 							Register your bot to generate an API key for DStats
 						</p>
 					</div>
 
 					<motion.div layout className="w-full">
-						<Card className="flex w-full flex-col items-center gap-6 rounded-2xl border border-white/10 bg-[#121212]/80 p-8 shadow-2xl backdrop-blur-xl">
+						<Card className="flex w-full flex-col items-center gap-6 rounded-2xl border border-border bg-card/80 p-8 shadow-[0_20px_50px_rgba(0,0,0,0.5),0_1px_0_rgba(255,255,255,0.1)_inset,0_10px_20px_rgba(110,140,251,0.08)] backdrop-blur-xl">
 							<AnimatePresence mode="popLayout">
 								{!apiKey && (
 									<motion.div
@@ -124,7 +126,7 @@ export default function GenerateKeyPage() {
 											<div className="space-y-2">
 												<Label
 													htmlFor="botName"
-													className="text-neutral-300 text-xs uppercase tracking-wider flex items-center gap-1"
+													className="text-muted-foreground font-label text-xs uppercase tracking-wider flex items-center gap-1"
 												>
 													<Cpu className="w-3 h-3" /> Bot Name *
 												</Label>
@@ -133,14 +135,14 @@ export default function GenerateKeyPage() {
 													placeholder="e.g. DStats Manager"
 													value={botName}
 													onChange={e => setBotName(e.target.value)}
-													className="bg-neutral-900/50 border-white/10 text-white focus-visible:ring-[#7F7EFF]/50"
+													className="bg-muted/50 border-border text-foreground focus-visible:ring-primary/50"
 												/>
 											</div>
 
 											<div className="space-y-2">
 												<Label
 													htmlFor="botId"
-													className="text-neutral-300 text-xs uppercase tracking-wider flex items-center gap-1"
+													className="text-muted-foreground font-label text-xs uppercase tracking-wider flex items-center gap-1"
 												>
 													<Fingerprint className="w-3 h-3" /> Bot ID *
 												</Label>
@@ -151,14 +153,14 @@ export default function GenerateKeyPage() {
 													placeholder="e.g. 1048291..."
 													value={botId}
 													onChange={e => setBotId(e.target.value)}
-													className="bg-neutral-900/50 border-white/10 text-white focus-visible:ring-[#7F7EFF]/50 font-mono"
+													className="bg-muted/50 border-border text-foreground focus-visible:ring-primary/50 font-label"
 												/>
 											</div>
 
 											<div className="space-y-2">
 												<Label
 													htmlFor="botAvatar"
-													className="text-neutral-400 text-xs uppercase tracking-wider"
+													className="text-muted-foreground font-label text-xs uppercase tracking-wider"
 												>
 													Avatar URL (Optional)
 												</Label>
@@ -168,14 +170,14 @@ export default function GenerateKeyPage() {
 													placeholder="https://..."
 													value={botAvatar}
 													onChange={e => setBotAvatar(e.target.value)}
-													className="bg-neutral-900/50 border-white/5 text-neutral-300 focus-visible:ring-[#7F7EFF]/50"
+													className="bg-muted/50 border-border text-foreground focus-visible:ring-primary/50"
 												/>
 											</div>
 
 											<div className="space-y-2">
 												<Label
 													htmlFor="ownerId"
-													className="text-neutral-400 text-xs uppercase tracking-wider"
+													className="text-muted-foreground font-label text-xs uppercase tracking-wider"
 												>
 													Owner ID (Optional)
 												</Label>
@@ -186,7 +188,7 @@ export default function GenerateKeyPage() {
 													placeholder="Your Discord ID"
 													value={ownerId}
 													onChange={e => setOwnerId(e.target.value)}
-													className="bg-neutral-900/50 border-white/5 text-neutral-300 focus-visible:ring-[#7F7EFF]/50 font-mono"
+													className="bg-muted/50 border-border text-foreground focus-visible:ring-primary/50 font-label"
 												/>
 											</div>
 										</div>
@@ -207,17 +209,17 @@ export default function GenerateKeyPage() {
 							<Button
 								onClick={handleGenerate}
 								disabled={!isFormValid || isGenerating || apiKey !== null}
-								className={`flex w-full h-14 items-center justify-center gap-3 rounded-xl text-lg font-bold text-white transition-all duration-300 ${
+								className={`flex w-full h-14 items-center justify-center gap-3 rounded-xl text-lg font-bold transition-all duration-300 ${
 									apiKey
 										? "cursor-default bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/10 border border-emerald-500/20"
 										: !isFormValid
-											? "text-neutral-500 bg-neutral-900/50 cursor-not-allowed border border-white/5"
-											: "bg-linear-to-r from-[#7F7EFF] to-[#A390E4] shadow-[0_0_20px_rgba(127,126,255,0.3)] hover:shadow-[0_0_30px_rgba(127,126,255,0.5)] hover:scale-[1.02]"
+											? "text-muted-foreground bg-muted/50 cursor-not-allowed border border-border"
+											: "bg-linear-to-r from-(--color-primary) to-(--color-secondary) text-primary-foreground shadow-[0_10px_20px_rgba(110,140,251,0.2)] hover:shadow-[0_15px_30px_rgba(110,140,251,0.35)] hover:scale-[1.02]"
 								}`}
 							>
 								{isGenerating ? (
 									<>
-										<Loader2 className="h-5 w-5 animate-spin text-white" />
+										<Loader2 className="h-5 w-5 animate-spin text-primary-foreground" />
 										Processing Data...
 									</>
 								) : apiKey ? (
@@ -236,18 +238,18 @@ export default function GenerateKeyPage() {
 									<motion.div
 										initial={{ opacity: 0, y: 15, scale: 0.95 }}
 										animate={{ opacity: 1, y: 0, scale: 1 }}
-										className="mt-2 flex w-full flex-col gap-3 border-t border-white/10 pt-6"
+										className="mt-2 flex w-full flex-col gap-3 border-t border-border pt-6"
 									>
-										<p className="text-left text-xs font-semibold uppercase tracking-widest text-[#7F7EFF]">
+										<p className="text-left font-label text-xs font-semibold uppercase tracking-widest text-(--color-primary)">
 											Production API Key
 										</p>
-										<div className="flex items-center justify-between rounded-xl border border-[#7F7EFF]/30 bg-[#7F7EFF]/5 p-3 group hover:border-[#7F7EFF]/60 transition-colors">
-											<code className="truncate font-mono text-sm text-white/90 ml-2">
+										<div className="flex items-center justify-between rounded-xl border border-primary/30 bg-(--color-primary)/5 p-3 group hover:border-primary/60 transition-colors">
+											<code className="truncate font-label text-sm text-foreground ml-2">
 												{apiKey}
 											</code>
 											<button
 												onClick={handleCopy}
-												className="p-2 rounded-lg bg-white/5 text-neutral-300 hover:bg-[#7F7EFF]/20 hover:text-white transition-all active:scale-95"
+												className="p-2 rounded-lg bg-muted text-muted-foreground hover:bg-primary/20 hover:text-foreground transition-all active:scale-95"
 											>
 												{isCopied ? (
 													<Check className="h-4 w-4 text-emerald-400" />
@@ -256,7 +258,7 @@ export default function GenerateKeyPage() {
 												)}
 											</button>
 										</div>
-										<p className="text-xs text-neutral-500 text-left">
+										<p className="text-xs text-muted-foreground text-left">
 											* Store this key securely. You won&apos;t be able to see it again.
 										</p>
 									</motion.div>
