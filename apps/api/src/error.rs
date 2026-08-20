@@ -50,6 +50,15 @@ pub enum AppError {
 
     #[error("Network request failed: {0}")]
     RequestFailed(#[from] reqwest::Error),
+
+    #[error("JSON serialization error: {0}")]
+    Json(#[from] serde_json::Error),
+
+    #[error("Bot not found on Discord")]
+    BotNotFoundOnDiscord,
+
+    #[error("Invalid header value: {0}")]
+    InvalidHeader(#[from] reqwest::header::InvalidHeaderValue),
 }
 
 pub type AppResult<T> = Result<T, AppError>;
@@ -77,6 +86,9 @@ impl IntoResponse for AppError {
             AppError::Database(_) => StatusCode::INTERNAL_SERVER_ERROR,
             AppError::EnvVarMissing(_) => StatusCode::BAD_REQUEST,
             AppError::RequestFailed(_) => StatusCode::INTERNAL_SERVER_ERROR,
+            AppError::BotNotFoundOnDiscord => StatusCode::BAD_REQUEST,
+            AppError::Json(_) => StatusCode::INTERNAL_SERVER_ERROR,
+            AppError::InvalidHeader(_) => StatusCode::BAD_REQUEST,
         };
 
         (
