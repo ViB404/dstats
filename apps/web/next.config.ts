@@ -13,6 +13,13 @@ const nextConfig: NextConfig = {
 			},
 		],
 	},
+	transpilePackages: [
+		"@clerk/nextjs",
+		"@tanstack/react-query",
+		"@tanstack/react-query-devtools",
+		"@vercel/analytics",
+		"recharts",
+	],
 };
 
 export default nextConfig;

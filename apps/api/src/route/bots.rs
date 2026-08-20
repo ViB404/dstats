@@ -2,16 +2,13 @@ use crate::AppState;
 use crate::error::AppError;
 use crate::http::response;
 use crate::models::bot_model::Bot;
-use crate::repositories::bot_repository::CreateBot;
-use crate::services::bot_service::BotService;
-use crate::utils::parse_snowflake::parse_snowflake;
+use crate::services::bot_service::{BotService, RegisterBot};
 use crate::utils::verify_hcaptcha::verify_token;
 use axum::extract::State;
 use axum::response::IntoResponse;
 use axum::{Extension, Json};
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
-use uuid::Uuid;
 
 #[derive(serde::Serialize)]
 struct RegisterBotResponse {
@@ -21,9 +18,7 @@ struct RegisterBotResponse {
 #[derive(Deserialize)]
 pub struct CreateBotAPIRequest {
     pub hcaptcha_token: String,
-    pub bot_id: String,
-    pub bot_name: String,
-    pub bot_avatar: Option<String>,
+    pub client_id: String,
     pub owner_id: Option<String>,
 }
 
@@ -31,23 +26,18 @@ pub async fn register(
     State(state): State<AppState>,
     Json(payload): Json<CreateBotAPIRequest>,
 ) -> Result<impl IntoResponse, AppError> {
-    let api_key = Uuid::new_v4().to_string();
-
-    println!("{}", payload.hcaptcha_token);
-
     verify_token(&payload.hcaptcha_token).await?;
 
-    let bot = CreateBot {
-        api_key: api_key.clone(),
-        bot_id: parse_snowflake(payload.bot_id)?,
-        bot_name: payload.bot_name,
-        bot_avatar: payload.bot_avatar,
-        owner_id: payload.owner_id.map(|id| parse_snowflake(id)).transpose()?,
+    let bot = RegisterBot {
+        client_id: payload.client_id,
+        owner_id: payload.owner_id,
     };
 
-    BotService::register_bot(&state.pool, bot).await?;
+    let bot_register_response = BotService::register_bot(&state.pool, bot).await?;
 
-    Ok(response::created(RegisterBotResponse { api_key }))
+    Ok(response::created(RegisterBotResponse {
+        api_key: bot_register_response.to_string(),
+    }))
 }
 
 #[derive(Serialize)]
