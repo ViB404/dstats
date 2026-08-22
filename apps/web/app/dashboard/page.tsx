@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { Key, Loader2 } from "lucide-react";
 import { motion, Variants } from "framer-motion";
 import { Button } from "@base-ui/react";
@@ -17,6 +18,7 @@ import { useDashboardData } from "@/hooks/use_dashboard_data";
 import { useBot } from "@/hooks/use_bot";
 import { useStats } from "@/hooks/use_stats";
 import { useGuilds } from "@/hooks/use_guilds";
+import { ApiError } from "@/api/client";
 
 const containerVariants: Variants = {
 	hidden: {
@@ -30,33 +32,33 @@ const containerVariants: Variants = {
 	},
 };
 
+function isUnauthorizedError(error: unknown): boolean {
+	return error instanceof ApiError && error.status === 401;
+}
+
 export default function DashboardPage() {
-	const {
-		apiKey,
-
-		isMounted,
-
-		isModalOpen,
-		setIsModalOpen,
-
-		inputKey,
-		setInputKey,
-
-		isSavingKey,
-		handleSaveKey,
-	} = useDashboardData();
+	const { apiKey, isMounted, isModalOpen, setIsModalOpen, inputKey, setInputKey, isSavingKey, handleSaveKey } =
+		useDashboardData();
 
 	const bot = useBot(apiKey);
 	const stats = useStats(apiKey);
 	const guilds = useGuilds(apiKey);
+
+	const isUnauthorized =
+		isUnauthorizedError(bot.error) || isUnauthorizedError(stats.error) || isUnauthorizedError(guilds.error);
+
+	useEffect(() => {
+		if (isUnauthorized && !isModalOpen) {
+			setIsModalOpen(true);
+		}
+	}, [isUnauthorized, isModalOpen, setIsModalOpen]);
 
 	if (!isMounted) {
 		return null;
 	}
 
 	const isLoading = bot.isLoading || stats.isLoading || guilds.isLoading;
-
-	const hasError = bot.isError || stats.isError || guilds.isError;
+	const hasError = (bot.isError || stats.isError || guilds.isError) && !isUnauthorized;
 
 	if (hasError) {
 		return (
@@ -83,7 +85,6 @@ export default function DashboardPage() {
 				{isLoading ? (
 					<div className="flex h-[60vh] flex-col items-center justify-center gap-4 text-muted-foreground">
 						<Loader2 className="h-10 w-10 animate-spin text-(--color-primary)" />
-
 						<p className="font-label text-sm uppercase tracking-widest">Fetching Analytics...</p>
 					</div>
 				) : (
@@ -110,7 +111,6 @@ export default function DashboardPage() {
 
 						<div className="grid grid-cols-1 gap-6 xl:grid-cols-[2fr_360px]">
 							<OverviewStatsCards stats={stats.data} />
-
 							<BotSummaryCard botData={bot.data} />
 						</div>
 
