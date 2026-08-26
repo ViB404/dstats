@@ -73,22 +73,29 @@ impl IntoResponse for AppError {
     fn into_response(self) -> Response {
         let status = match self {
             AppError::InvalidApiKey => StatusCode::UNAUTHORIZED,
-            AppError::BotNotFound => StatusCode::NOT_FOUND,
-            AppError::GuildNotFound => StatusCode::NOT_FOUND,
-            AppError::EventNotFound => StatusCode::NOT_FOUND,
-            AppError::BotAlreadyExists => StatusCode::CONFLICT,
-            AppError::GuildAlreadyExists => StatusCode::CONFLICT,
-            AppError::GuildAlreadyJoined => StatusCode::CONFLICT,
-            AppError::GuildAlreadyLeft => StatusCode::CONFLICT,
-            AppError::InvalidEventType => StatusCode::BAD_REQUEST,
-            AppError::InvalidPayload => StatusCode::BAD_REQUEST,
-            AppError::BotGuildLinkNotFound => StatusCode::NOT_FOUND,
+
+            AppError::BotNotFound
+            | AppError::GuildNotFound
+            | AppError::EventNotFound
+            | AppError::BotGuildLinkNotFound => StatusCode::NOT_FOUND,
+
+            AppError::BotAlreadyExists
+            | AppError::GuildAlreadyExists
+            | AppError::GuildAlreadyJoined
+            | AppError::GuildAlreadyLeft => StatusCode::CONFLICT,
+
+            AppError::InvalidEventType
+            | AppError::InvalidPayload
+            | AppError::BotNotFoundOnDiscord
+            | AppError::InvalidHeader(_) => StatusCode::BAD_REQUEST,
+
             AppError::Database(_) => StatusCode::INTERNAL_SERVER_ERROR,
+
             AppError::EnvVarMissing(_) => StatusCode::BAD_REQUEST,
+
             AppError::RequestFailed(_) => StatusCode::INTERNAL_SERVER_ERROR,
-            AppError::BotNotFoundOnDiscord => StatusCode::BAD_REQUEST,
+
             AppError::Json(_) => StatusCode::INTERNAL_SERVER_ERROR,
-            AppError::InvalidHeader(_) => StatusCode::BAD_REQUEST,
         };
 
         (

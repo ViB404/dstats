@@ -10,28 +10,65 @@ impl EventRepository {
     pub async fn create(
         pool: &PgPool,
         bot_id: Uuid,
-        guild_id: Option<Uuid>,
         event_type: EventType,
-        payload: Option<Value>,
+        payload: Value,
     ) -> Result<Event, sqlx::Error> {
         sqlx::query_as::<_, Event>(
             r#"
             INSERT INTO events (
                 bot_id,
-                guild_id,
+                event_type,
+                payload
+            )
+            VALUES ($1, $2, $3)
+            RETURNING *
+            "#,
+        )
+        .bind(bot_id)
+        .bind(event_type)
+        .bind(payload)
+        .fetch_one(pool)
+        .await
+    }
+
+    pub async fn create_bulk(
+        pool: &PgPool,
+        bot_id: i64,
+        events: Vec<(Uuid, EventType, Value)>,
+    ) -> Result<Vec<Event>, sqlx::Error> {
+        if events.is_empty() {
+            return Ok(Vec::new());
+        }
+
+        let mut tx = pool.begin().await?;
+        let mut created_events = Vec::with_capacity(events.len());
+
+        for (id, event_type, payload) in events {
+            let event = sqlx::query_as::<_, Event>(
+                r#"
+            INSERT INTO events (
+                id,
+                bot_id,
                 event_type,
                 payload
             )
             VALUES ($1, $2, $3, $4)
             RETURNING *
             "#,
-        )
-        .bind(bot_id)
-        .bind(guild_id)
-        .bind(event_type)
-        .bind(payload)
-        .fetch_one(pool)
-        .await
+            )
+            .bind(id)
+            .bind(bot_id)
+            .bind(event_type)
+            .bind(payload)
+            .fetch_one(&mut *tx)
+            .await?;
+
+            created_events.push(event);
+        }
+
+        tx.commit().await?;
+
+        Ok(created_events)
     }
 
     pub async fn find_by_bot_id(pool: &PgPool, bot_id: Uuid) -> Result<Vec<Event>, sqlx::Error> {
@@ -48,23 +85,6 @@ impl EventRepository {
         .await
     }
 
-    pub async fn find_by_guild_id(
-        pool: &PgPool,
-        guild_id: Uuid,
-    ) -> Result<Vec<Event>, sqlx::Error> {
-        sqlx::query_as::<_, Event>(
-            r#"
-            SELECT *
-            FROM events
-            WHERE guild_id = $1
-            ORDER BY created_at DESC
-            "#,
-        )
-        .bind(guild_id)
-        .fetch_all(pool)
-        .await
-    }
-
     pub async fn find_recent_by_bot_id(
         pool: &PgPool,
         bot_id: Uuid,
@@ -73,13 +93,13 @@ impl EventRepository {
     ) -> Result<Vec<Event>, sqlx::Error> {
         sqlx::query_as::<_, Event>(
             r#"
-        SELECT *
-        FROM events 
-        WHERE bot_id = $1
-        ORDER BY created_at DESC
-        LIMIT $2
-        OFFSET $3
-        "#,
+            SELECT *
+            FROM events
+            WHERE bot_id = $1
+            ORDER BY created_at DESC
+            LIMIT $2
+            OFFSET $3
+            "#,
         )
         .bind(bot_id)
         .bind(limit)
@@ -89,7 +109,7 @@ impl EventRepository {
     }
 
     pub async fn count_by_bot(pool: &PgPool, bot_id: Uuid) -> Result<i64, sqlx::Error> {
-        let count: i64 = sqlx::query_scalar(
+        sqlx::query_scalar(
             r#"
             SELECT COUNT(*)
             FROM events
@@ -98,13 +118,11 @@ impl EventRepository {
         )
         .bind(bot_id)
         .fetch_one(pool)
-        .await?;
-
-        Ok(count)
+        .await
     }
 
     pub async fn count_by_type(pool: &PgPool, event_type: EventType) -> Result<i64, sqlx::Error> {
-        let count: i64 = sqlx::query_scalar(
+        sqlx::query_scalar(
             r#"
             SELECT COUNT(*)
             FROM events
@@ -113,8 +131,6 @@ impl EventRepository {
         )
         .bind(event_type)
         .fetch_one(pool)
-        .await?;
-
-        Ok(count)
+        .await
     }
 }

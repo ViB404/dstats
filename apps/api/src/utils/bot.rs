@@ -1,5 +1,4 @@
 use crate::error::AppResult;
-use anyhow::{Error, Result};
 use axum::http::HeaderValue;
 use reqwest::header::{ACCEPT, AUTHORIZATION, HeaderMap};
 use serde::Deserialize;
