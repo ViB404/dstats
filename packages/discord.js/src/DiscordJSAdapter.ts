@@ -1,5 +1,5 @@
 import { Events, type Client } from "discord.js";
-import type { Adapter, BotInfo, GuildJoinPayload, GuildLeavePayload } from "@dstats/sdk";
+import type { Adapter, BotInfo, CommandUsePayload, GuildJoinPayload, GuildLeavePayload } from "@dstats/sdk";
 
 export class DiscordJSAdapter implements Adapter {
 	public constructor(private readonly client: Client) {}
@@ -30,6 +30,18 @@ export class DiscordJSAdapter implements Adapter {
 		this.client.on(Events.GuildDelete, guild => {
 			callback({
 				guild_id: guild.id,
+			});
+		});
+	}
+
+	public onCommandUse(callback: (commandUse: CommandUsePayload) => void): void {
+		this.client.on(Events.InteractionCreate, interaction => {
+			if (!interaction.isChatInputCommand()) return;
+			if (!interaction.guildId) return;
+
+			callback({
+				command_name: interaction.commandName,
+				guild_id: interaction.guildId,
 			});
 		});
 	}

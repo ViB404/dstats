@@ -1,6 +1,7 @@
 import type { Adapter } from "./adapters/Adapter";
 import { ApiClient } from "./client/api_client";
-import { GuildJoinPayload, GuildLeavePayload } from "./types/index";
+import { QueueManager } from "./queue/queue_manager";
+import { EventPayload, EventTypes, GuildJoinPayload, GuildLeavePayload } from "./types/index";
 import { logger } from "./utils/logger";
 
 export interface StatsOptions {
@@ -12,17 +13,23 @@ export interface StatsOptions {
 
 export class Stats {
 	private readonly apiClient: ApiClient;
+	private readonly queueManager: QueueManager;
+	private readonly flushTimer: ReturnType<typeof setInterval>;
 
 	public constructor(private readonly options: StatsOptions) {
 		logger.setDebug(options.debug ?? false);
 
 		this.apiClient = new ApiClient(options.baseUrl ?? "https://api.havochz.xyz", options.apiKey);
+
+		this.queueManager = new QueueManager();
+
 		this.registerEvents();
+		this.flushTimer = this.startQueueFlush();
 	}
 
-	private registerEvents() {
+	private registerEvents(): void {
 		this.options.adapter.onReady(() => {
-			// TODO: Send bot info to the API
+			// TODO
 		});
 
 		this.options.adapter.onGuildJoin(guildInfo => {
@@ -33,14 +40,63 @@ export class Stats {
 				member_count: guildInfo.member_count,
 			};
 
-			this.apiClient.guildJoin(payload).catch(e => console.error(e));
+			this.apiClient.guildJoin(payload).catch(e => {
+				logger.error(e);
+			});
 		});
 
 		this.options.adapter.onGuildLeave(guildLeft => {
 			const payload: GuildLeavePayload = {
 				guild_id: guildLeft.guild_id,
 			};
-			this.apiClient.guildLeave(payload).catch(e => console.error(e));
+
+			this.apiClient.guildLeave(payload).catch(e => {
+				logger.error(e);
+			});
 		});
+
+		this.options.adapter.onCommandUse(commandUse => {
+			logger.log("[DStats] Command received:", commandUse);
+
+			this.queueManager.commands.add(commandUse.guild_id, commandUse.command_name);
+		});
+	}
+
+	private startQueueFlush(): ReturnType<typeof setInterval> {
+		return setInterval(() => {
+			this.flushQueues().catch(e => {
+				logger.error("[DStats] Failed to flush queues:", e);
+			});
+		}, 30_000);
+	}
+
+	private static readonly FLUSH_TIME = 15 * 60 * 1000;
+	private async flushQueues(): Promise<void> {
+		const commands = this.queueManager.commands.flush();
+
+		if (commands.size === 0) {
+			return;
+		}
+
+		const events: EventPayload[] = [];
+
+		for (const [guildId, guildCommands] of commands) {
+			events.push({
+				id: crypto.randomUUID(),
+				event_type: EventTypes.CommandUse,
+				payload: {
+					guild_id: guildId,
+					commands: Object.fromEntries(guildCommands),
+				},
+			});
+		}
+
+		logger.log("[DStats] Flushing events:", events);
+
+		await this.apiClient.events(events);
+	}
+
+	public destroy(): void {
+		clearInterval(this.flushTimer);
 	}
 }
