@@ -19,6 +19,19 @@ pub struct CommandUsePayload {
     pub commands: HashMap<String, i64>,
 }
 
+#[derive(Debug, sqlx::FromRow)]
+pub struct CommandUsageStats {
+    pub total_uses: i64,
+    pub total_commands: i64,
+    pub last_activity: Option<chrono::DateTime<chrono::Utc>>,
+}
+
+#[derive(Debug, sqlx::FromRow)]
+pub struct CommandUsageSummary {
+    pub command_name: String,
+    pub usage_count: i64,
+}
+
 impl CommandUsageRepository {
     pub async fn upsert(
         pool: &PgPool,
@@ -93,7 +106,7 @@ impl CommandUsageRepository {
 
     pub async fn find_by_bot_id(
         pool: &PgPool,
-        bot_id: i64,
+        bot_id: Uuid,
     ) -> Result<Vec<CommandUsage>, sqlx::Error> {
         sqlx::query_as::<_, CommandUsage>(
             r#"
@@ -110,7 +123,7 @@ impl CommandUsageRepository {
 
     pub async fn find_by_guild_id(
         pool: &PgPool,
-        guild_id: i64,
+        guild_id: Uuid,
     ) -> Result<Vec<CommandUsage>, sqlx::Error> {
         sqlx::query_as::<_, CommandUsage>(
             r#"
@@ -127,8 +140,8 @@ impl CommandUsageRepository {
 
     pub async fn find_by_command(
         pool: &PgPool,
-        bot_id: i64,
-        guild_id: i64,
+        bot_id: Uuid,
+        guild_id: Uuid,
         command_name: &str,
     ) -> Result<Option<CommandUsage>, sqlx::Error> {
         sqlx::query_as::<_, CommandUsage>(
@@ -144,6 +157,43 @@ impl CommandUsageRepository {
         .bind(guild_id)
         .bind(command_name)
         .fetch_optional(pool)
+        .await
+    }
+
+    pub async fn get_stats(pool: &PgPool, bot_id: Uuid) -> Result<CommandUsageStats, sqlx::Error> {
+        sqlx::query_as::<_, CommandUsageStats>(
+            r#"
+            SELECT
+                COALESCE(SUM(usage_count), 0)::BIGINT AS total_uses,
+                COUNT(DISTINCT command_name)::BIGINT AS total_commands,
+                MAX(updated_at) AS last_activity
+            FROM command_usage
+            WHERE bot_id = $1
+            "#,
+        )
+        .bind(bot_id)
+        .fetch_one(pool)
+        .await
+    }
+
+    pub async fn get_top_commands(
+        pool: &PgPool,
+        bot_id: Uuid,
+    ) -> Result<Vec<CommandUsageSummary>, sqlx::Error> {
+        sqlx::query_as::<_, CommandUsageSummary>(
+            r#"
+            SELECT
+                command_name,
+                SUM(usage_count)::BIGINT AS usage_count
+            FROM command_usage
+            WHERE bot_id = $1
+            GROUP BY command_name
+            ORDER BY usage_count DESC
+            LIMIT 10
+            "#,
+        )
+        .bind(bot_id)
+        .fetch_all(pool)
         .await
     }
 }
