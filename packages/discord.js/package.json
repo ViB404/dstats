@@ -1,7 +1,7 @@
 {
 	"name": "@dstats/discord.js",
 	"description": "Official Discord.js adapter for DStats. Automatically tracks guild joins and guild leaves with zero configuration.",
-	"version": "0.3.0",
+	"version": "0.3.1",
 	"type": "module",
 	"exports": {
 		".": {
