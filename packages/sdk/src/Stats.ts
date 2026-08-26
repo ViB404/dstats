@@ -15,6 +15,7 @@ export class Stats {
 	private readonly apiClient: ApiClient;
 	private readonly queueManager: QueueManager;
 	private readonly flushTimer: ReturnType<typeof setInterval>;
+	private static readonly FLUSH_TIME = 5 * 60 * 1000;
 
 	public constructor(private readonly options: StatsOptions) {
 		logger.setDebug(options.debug ?? false);
@@ -67,10 +68,9 @@ export class Stats {
 			this.flushQueues().catch(e => {
 				logger.error("[DStats] Failed to flush queues:", e);
 			});
-		}, 30_000);
+		}, Stats.FLUSH_TIME);
 	}
 
-	private static readonly FLUSH_TIME = 15 * 60 * 1000;
 	private async flushQueues(): Promise<void> {
 		const commands = this.queueManager.commands.flush();
 
