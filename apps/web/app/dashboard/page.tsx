@@ -11,6 +11,7 @@ import Footer from "@/components/layout/footer";
 import ApiKeyModal from "@/components/dashboard/api_key_modal";
 import OverviewStatsCards from "@/components/dashboard/overview_card";
 import BotSummaryCard from "@/components/dashboard/bot_summary_card";
+import CommandUsageCard from "@/components/dashboard/command_usage_card";
 import ChartsContainer from "@/components/dashboard/chart_container";
 import GuildGrid from "@/components/dashboard/guild_grid";
 
@@ -113,6 +114,8 @@ export default function DashboardPage() {
 							<OverviewStatsCards stats={stats.data} />
 							<BotSummaryCard botData={bot.data} />
 						</div>
+
+						<CommandUsageCard data={stats.data?.command_stats} />
 
 						<ChartsContainer stats={stats.data} />
 
