@@ -13,37 +13,41 @@
 [![Dashboard](https://img.shields.io/badge/Open-Dashboard-5865F2?style=for-the-badge)](https://dstats.havochz.xyz/dashboard)
 [![Generate API Key](https://img.shields.io/badge/Generate-API%20Key-22C55E?style=for-the-badge)](https://dstats.havochz.xyz/dashboard/api-keys)
 
-Track guild joins, guild leaves, and growth with almost zero setup.
+Track guild joins, guild leaves, and growth with a few lines of code.
 
 </div>
 
 ---
 
-## About
+## What is DStats?
 
-DStats is a lightweight analytics platform for Discord bots.
+DStats gives Discord bot developers a simple way to collect and understand bot analytics without building their own analytics infrastructure.
 
-Instead of building your own analytics pipeline, DStats lets you collect useful statistics with a few lines of code.
+The SDK handles event collection and sends the data to the DStats API, while the dashboard turns their own data into useful analytics.
+
+### Why DStats?
+
+- Drop-in SDK
+- Minimal data collection
+- Privacy-first by design
+- Built for Discord bots
+- Self-contained analytics pipeline
+- Open source
 
 ---
 
 ## Features
 
-- 📈 Guild growth analytics (Coming Soon!)
-- 🚪 Guild join and leave tracking
-- 🖥️ Clean analytics web dashboard
-- 🔒 Secure API key authentication
-- ⚡ Discord.js adapter
+- Guild growth analytics
+- Guild join and leave tracking
+- Command usage tracking
+- Clean analytics web dashboard
+- Secure API key authentication
+- Discord.js adapter
 
 ---
 
 ## Installation
-
-### npm
-
-```bash
-npm install @dstats/sdk @dstats/discord.js
-```
 
 ### pnpm
 
@@ -51,11 +55,23 @@ npm install @dstats/sdk @dstats/discord.js
 pnpm add @dstats/sdk @dstats/discord.js
 ```
 
-### Yarn
+<details>
+<summary>npm</summary>
+
+```bash
+npm install @dstats/sdk @dstats/discord.js
+```
+
+</details>
+
+<details>
+<summary>Yarn</summary>
 
 ```bash
 yarn add @dstats/sdk @dstats/discord.js
 ```
+
+</details>
 
 ---
 
@@ -65,6 +81,13 @@ yarn add @dstats/sdk @dstats/discord.js
 
 - Node.js 18+
 - A DStats API key — [generate one here](https://dstats.havochz.xyz/dashboard/api-keys)
+
+### Env Variables
+
+```env
+DSTATS_API_KEY=your_api_key
+DISCORD_TOKEN=your_bot_token
+```
 
 ### Setup
 
@@ -89,32 +112,61 @@ That's it. Guild joins, leaves, and stats are automatically tracked.
 
 ---
 
+## Integrations
+
+### [@dstats/discord.js](https://www.npmjs.com/package/@dstats/discord.js)
+
+Official adapter for Discord.js bots.
+
+```ts
+new Stats({
+  apiKey: process.env.DSTATS_API_KEY!,
+  adapter: new DiscordJSAdapter(client),
+});
+```
+
+More Discord libraries and adapters are planned.
+
+| Adapter    | Status       |
+| ---------- | ------------ |
+| Discord.js | ✅ Available |
+| Discord.py | 🚧 Planned   |
+| Serenity   | 🚧 Planned   |
+| Discordeno | 🚧 Planned   |
+
+---
+
 ## Dashboard
 
-Manage your bots and view analytics from the web dashboard.
+The DStats dashboard lets you monitor your Discord bot's analytics from one place.
 
-| Feature          | Link                                          |
-| ---------------- | --------------------------------------------- |
-| Dashboard        | https://dstats.havochz.xyz/dashboard          |
-| Generate API Key | https://dstats.havochz.xyz/dashboard/api-keys |
+[![Dashboard](https://img.shields.io/badge/Open-Dashboard-5865F2?style=for-the-badge)](https://dstats.havochz.xyz/dashboard)
+[![Generate API Key](https://img.shields.io/badge/Generate-API%20Key-22C55E?style=for-the-badge)](https://dstats.havochz.xyz/dashboard/api-keys)
 
-Current dashboard features:
+Available today:
 
 - Bot overview
-- API key management
-- Guild analytics
-- Join history
-- Leave history
-- Simple stats (total guilds, guild leaves, active guilds)
+- Total guilds
+- Active guilds
+- Command usage tracking
+- Guild joins
+- Guild leaves
+- Join/leave history
 
 > 🚧 Additional analytics are under development.
 
 ---
 
-## Architecture
+## How it works
+
+DStats consists of three main components:
+
+1. **SDK**: Collects bot events.
+2. **API**: Authenticates requests and stores analytics.
+3. **Dashboard**: Visualizes collected statistics.
 
 ```mermaid
-graph TD
+graph LR
     A[Discord Bot] --> B[Discord.js Adapter]
     B --> C[DStats SDK]
     C --> D[DStats API]
@@ -124,11 +176,25 @@ graph TD
 
 ---
 
+## Privacy
+
+DStats is designed to collect only the data required for bot analytics.
+
+We do not:
+
+- Read message content
+- Store message content
+- Track unnecessary user activity
+
+DStats focuses on bot-level and guild-level analytics rather than user surveillance.
+
+---
+
 ## Packages
 
 | Package              | Description        |
 | -------------------- | ------------------ |
-| `@dstats/sdk`        | Core SDK           |
+| `@dstats/sdk`        | Core analytics SDK |
 | `@dstats/discord.js` | Discord.js adapter |
 
 More adapters are planned 🥲.
@@ -137,60 +203,53 @@ More adapters are planned 🥲.
 
 ## API
 
-Current endpoints:
+DStats exposes a REST API for SDKs and custom integrations.
 
-```
-POST /v1/register
-
-POST /v1/guild/join
-POST /v1/guild/leave
-
-GET /v1/bot
-GET /v1/guilds
-
-GET /v1/stats
-```
+| Method | Endpoint          | Description                                      |
+| ------ | ----------------- | ------------------------------------------------ |
+| GET    | `/`               | Check API status                                 |
+| POST   | `/v1/register`    | Register a bot                                   |
+| POST   | `/v1/guild/join`  | Record a guild join                              |
+| POST   | `/v1/guild/leave` | Record a guild leave                             |
+| GET    | `/v1/bot`         | Get bot information                              |
+| GET    | `/v1/guilds`      | Get guild data                                   |
+| GET    | `/v1/stats`       | Get bot statistics                               |
+| POST   | `/v1/event`       | Record Discord bot events, such as command usage |
 
 ---
 
-## Tech Stack
+## Built With
 
-### Backend
-
-- Rust
-- Axum
-- SQLx
-- PostgreSQL
-
-### Frontend
-
-- Next.js
-- React
-- Tailwind CSS
-
-### SDK
-
-- TypeScript
+| Layer     | Technology        |
+| --------- | ----------------- |
+| Backend   | Rust + Axum       |
+| Database  | PostgreSQL + SQLx |
+| Dashboard | Next.js + React   |
+| Styling   | Tailwind CSS      |
+| SDK       | TypeScript        |
 
 ---
 
 ## Roadmap
 
+### Analytics
+
 - [x] Guild join tracking
 - [x] Guild leave tracking
-- [x] Dashboard
-- [x] API authentication
-- [x] Discord.js adapter
-- [x] Simple stats (total guilds, leaves, active guilds)
-- [ ] Charts
-- [ ] Daily analytics
-- [ ] Slash command analytics
-- [ ] Command usage analytics
+- [x] Guild statistics
+- [x] Command usage analytics
+- [x] Charts
+- [x] Daily analytics
+- [ ] Command performance
 - [ ] Member growth
-- [ ] Invite tracking
+- [ ] Error tracking
+- [ ] Event analytics
+
+### Platform
+
 - [ ] Webhooks
-- [ ] Additional adapters
 - [ ] Public API
+- [ ] Additional adapters
 
 ---
 
@@ -198,20 +257,25 @@ GET /v1/stats
 
 Contributions are welcome.
 
-1. Fork the repository.
-2. Create a feature branch.
-3. Commit your changes.
-4. Open a Pull Request.
+Before opening a pull request:
 
-Please keep pull requests focused and descriptive.
+1. Check existing issues.
+2. Keep changes focused.
+3. Add tests where applicable.
+4. Run the project's checks locally.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
 ---
 
-## Privacy
+## Community & Support
 
-DStats only stores the information required to provide analytics.
+- Report bugs through GitHub Issues
+- Request features through GitHub Discussions/Issues
+- Contribute through pull requests
+- Star the repository if DStats is useful to you
 
-We do not inspect message content or collect unnecessary user data.
+[![Discord Server](https://discord.com/api/guilds/1190175283475660851/widget.png?style=banner4)](https://discord.gg/aFJjYYfNcY)
 
 ---
 
@@ -221,42 +285,21 @@ This project is licensed under the MIT License.
 
 ---
 
-## Support
-
-If you find DStats useful, consider supporting the project.
-
-- GitHub Star ⭐
-- Report bugs
-- Suggest new features
-- Contribute code
-
----
-
-## 🚧 Development Status
-
-DStats is currently under active development.
-
-Breaking changes may occur until the first stable release.
-
-If you're using DStats today, expect APIs and SDKs to evolve as new features are added.
-
----
-
 ## Contributors
 
 <div align="center">
+
 <a href="https://github.com/ViB404/dstats/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=ViB404/dstats" />
 </a>
 
-Made with [contrib.rocks](https://contrib.rocks).
 </div>
 
 ---
 
-# Disclaimer
+## Disclaimer
 
-DStats is not affiliated, associated, authorized, endorsed by, or in any way officially connected with Discord Inc., or any of its subsidiaries or affiliates.
+DStats is an independent project and is not affiliated with or endorsed by Discord Inc.
 
 ---
 
